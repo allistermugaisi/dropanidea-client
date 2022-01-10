@@ -1,0 +1,8 @@
+.chat-landing {
+	visibility: hidden;
+}
+@media screen and (min-width: 1024px) {
+	.chat-landing {
+		visibility: visible;
+	}
+}

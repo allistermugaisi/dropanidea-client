@@ -1,0 +1,9 @@
+export { default as Register } from './Register';
+export { default as Login } from './Login';
+export { default as Welcome } from './Welcome';
+export { default as Chat } from './Chat';
+export { default as Content } from './Content';
+export { default as ContentLanding } from './ContentLanding';
+export { default as ChatLanding } from './ChatLanding';
+export { default as Messages } from './Messages';
+export { default as PageNotFound } from './PageNotFound';
