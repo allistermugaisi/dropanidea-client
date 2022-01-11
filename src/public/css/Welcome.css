@@ -1,0 +1,49 @@
+.welcome-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0;
+	background: rgba(30, 31, 83);
+	height: 100%;
+	width: 100%;
+}
+
+.logo-land {
+	border-radius: 10%;
+	width: 30%;
+	height: auto;
+	background: transparent;
+	padding: 0.4rem;
+}
+
+.logo-welcome-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding-top: 10rem;
+	padding-bottom: 2rem;
+}
+.btn-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	text-decoration: none;
+	padding-top: 1.2rem;
+	padding-bottom: 15rem;
+}
+.btn-landing {
+	background: rgb(43, 184, 209);
+	color: #fff;
+	border-radius: 20px;
+	padding: 10px 30px 10px 30px;
+	width: 10%;
+	min-width: 100px;
+	text-decoration: none;
+}
+.btn-landing:hover {
+	opacity: 0.7;
+}
