@@ -12,7 +12,7 @@ import {
 	loginFail,
 } from './error-actions';
 
-const USERS_AUTH = 'http://localhost:5000/api/v1/auth';
+const USERS_AUTH = 'https://zinniaglobalconsultancy.com/api/v1/auth';
 
 // Setup config headers and token
 
