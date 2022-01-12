@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { TextField, MenuItem } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import Input from '../utils/useInput';
 import AdornedButton from '../utils/AdornedButton';
+import { registerUser } from '../store/actions/auth-actions';
 import '../public/css/Register.css';
 
 const roles = [
@@ -30,6 +31,8 @@ const roles = [
 ];
 
 const Register = () => {
+	const dispatch = useDispatch();
+
 	const [showPassword, setShowPassword] = useState(false);
 	const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -55,8 +58,10 @@ const Register = () => {
 
 	const onSubmit = async (data, e) => {
 		e.preventDefault();
-		// setButtonLoading(true);
-		// await dispatch(loginUser(data));
+		setButtonLoading(true);
+		e.preventDefault();
+		await dispatch(registerUser(data));
+		setButtonLoading(false);
 	};
 	return (
 		<section className="register-section">
@@ -126,6 +131,9 @@ const Register = () => {
 							</div>
 							<div className="input-box">
 								<TextField
+									{...register('role', {
+										required: 'Role is required!',
+									})}
 									fullWidth
 									select
 									label="User role"

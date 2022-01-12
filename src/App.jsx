@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+import { SocketProvider } from './context/SocketProvider';
 import './App.css';
 import {
 	Login,
@@ -8,9 +9,11 @@ import {
 	Content,
 	ContentLanding,
 	ChatLanding,
+	PsychometricTest,
 	Messages,
 	PageNotFound,
 } from './components';
+import PrivateRoute from './middleware/PrivateRoute';
 import { Landing } from './components/app';
 
 // null   Anyone can access route
@@ -18,20 +21,22 @@ import { Landing } from './components/app';
 // false  logged in user can't access route
 
 const App = () => {
+	const id = Math.random();
+
 	return (
-		<Routes>
-			<Route index path="/" element={<Welcome />} />
-			<Route path="dashboard" element={<Landing />}>
-				<Route index element={<ContentLanding />} />
-				<Route path=":contentId" element={<Content />} />
-			</Route>
-			<Route path="login" element={<Login />} />
-			<Route path="register" element={<Register />} />
-			<Route path="chat/*" element={<Chat />}>
-				<Route path=":chatId" element={<Messages />} />
-			</Route>
-			<Route path="*" element={<PageNotFound />} />
-		</Routes>
+		<SocketProvider id={id}>
+			<Switch>
+				<PrivateRoute exact path="/" component={Welcome} />
+				<PrivateRoute exact path="/dashboard" component={Landing} />
+				<PrivateRoute exact path="/dashboard/:id" component={Landing} />
+				<PrivateRoute path="/psychometric_test" component={PsychometricTest} />
+				<PrivateRoute exact path="/ideas" component={Chat} />
+				<PrivateRoute path="/ideas/:ideaId" component={Chat} />
+				<Route path="/login" component={Login} />
+				<Route path="/register" component={Register} />
+				<Route path="*" component={PageNotFound} />
+			</Switch>
+		</SocketProvider>
 	);
 };
 

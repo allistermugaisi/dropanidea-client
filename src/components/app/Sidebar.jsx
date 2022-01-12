@@ -54,7 +54,7 @@ const Sidebar = ({ toggled, handleDrawerToggle }) => {
 						<span className="tooltip">Users</span>
 					</li>
 					<li>
-						<NavLink to="/chat" activeclassname="active" onClick={handleClick}>
+						<NavLink to="/ideas" activeclassname="active" onClick={handleClick}>
 							<i className="bx bx-chat"></i>
 							<span className="links_name">Chat</span>
 						</NavLink>

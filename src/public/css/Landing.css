@@ -465,7 +465,7 @@ nav .navbar .links li:hover .js-sub-menu {
 		width: calc(100% - 60px);
 		left: 60px;
 		overflow-y: auto;
-		background: #e4e9f7;
+		/* background: #e4e9f7; */
 		box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
 		transition: all 0.5s ease;
 	}

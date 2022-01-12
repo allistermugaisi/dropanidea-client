@@ -11,7 +11,11 @@ import {
 
 const initialState = {
 	isAuthenticated: !!localStorage.getItem('token'),
-	isAdmin: false,
+	isTopLevelManager: false,
+	isMiddleLevelManager: false,
+	isLowLevelManager: false,
+	isBusinessOwner: false,
+	isNormalStaff: false,
 	isLoading: false,
 	user: null,
 };
@@ -33,7 +37,6 @@ export default function AuthReducer(state = initialState, action) {
 			};
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
-			localStorage.setItem('token', action.payload.token);
 			return {
 				...state,
 				...action.payload,

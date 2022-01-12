@@ -5,5 +5,7 @@ export { default as Chat } from './Chat';
 export { default as Content } from './Content';
 export { default as ContentLanding } from './ContentLanding';
 export { default as ChatLanding } from './ChatLanding';
+export { default as ChatRoute } from './ChatRoute';
 export { default as Messages } from './Messages';
+export { default as PsychometricTest } from './PsychometricTest';
 export { default as PageNotFound } from './PageNotFound';

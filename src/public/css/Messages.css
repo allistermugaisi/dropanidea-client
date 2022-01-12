@@ -6,7 +6,7 @@
 
 @media screen and (min-width: 1024px) {
 	.container-desktop {
-		margin-left: 40%;
+		width: 60%;
 		display: block;
 	}
 }
@@ -162,6 +162,7 @@
 	align-items: center;
 	border-radius: 60px;
 	position: relative;
+	padding: 0 20px;
 	cursor: pointer;
 	background: #fff;
 	transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -184,26 +185,7 @@
 	color: #555;
 	resize: none;
 } */
-.chat-footer .mic {
-	display: block;
-	width: 35px;
-	height: 35px;
-	margin-right: 20px;
-	cursor: pointer;
-}
 
-.chat-footer .emo {
-	display: block;
-	width: 30px;
-	height: 30px;
-	margin-left: 20px;
-}
-.chat-footer .emo-1 {
-	display: block;
-	width: 30px;
-	height: 30px;
-	margin-right: 10px;
-}
 .chat-footer .icons {
 	position: absolute;
 	right: 80px;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Link, Outlet, Routes, Route, useParams } from 'react-router-dom';
+import { Link, Switch, Route, useParams } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import { Popover, Typography } from '@mui/material';
-import { ChatLanding } from './index';
+import { ChatLanding, Messages, ChatRoute } from './index';
 import '../public/css/Chat.css';
 
 const Chat = () => {
@@ -21,6 +21,9 @@ const Chat = () => {
 
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
+
+	// console.log(params.ideaId);
+
 	return (
 		<>
 			{/* Desktop View */}
@@ -61,7 +64,7 @@ const Chat = () => {
 						</div>
 					</div>
 					<div className="inbox-section">
-						<Link to="product" className="message">
+						<Link to="/ideas/product_launch" className="message">
 							<div className="picture-section">
 								<img
 									src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
@@ -82,7 +85,7 @@ const Chat = () => {
 								<div className="num">25</div>
 							</div>
 						</Link>
-						<Link to="marketing" className="message">
+						<Link to="/ideas/marketing_survey" className="message">
 							<div className="picture-section">
 								<img
 									src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
@@ -103,7 +106,7 @@ const Chat = () => {
 								<div className="num">8</div>
 							</div>
 						</Link>
-						<Link to="brand" className="message">
+						<Link to="/ideas/brand_awareness" className="message">
 							<div className="picture-section">
 								<img
 									src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
@@ -127,9 +130,12 @@ const Chat = () => {
 					</div>
 				</main>
 				<>
-					<Routes>
-						<Route index element={<ChatLanding />} />
-					</Routes>
+					<ChatRoute params={4} />
+					{/* {params.ideaId === 'undefined' ? (
+						<ChatLanding params={params.ideaId} />
+					) : (
+						<Messages params={params.ideaId} />
+					)} */}
 				</>
 			</section>
 			{/* Mobile View */}
@@ -169,7 +175,7 @@ const Chat = () => {
 					</div>
 				</div>
 				<div className="inbox-section">
-					<Link to="product" className="message">
+					<Link to="/ideas/product_launch" className="message">
 						<div className="picture-section">
 							<img
 								src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
@@ -190,7 +196,7 @@ const Chat = () => {
 							<div className="num">25</div>
 						</div>
 					</Link>
-					<Link to="marketing" className="message">
+					<Link to="/ideas/marketing_survey" className="message">
 						<div className="picture-section">
 							<img
 								src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
@@ -211,7 +217,7 @@ const Chat = () => {
 							<div className="num">8</div>
 						</div>
 					</Link>
-					<Link to="brand" className="message">
+					<Link to="/ideas/brand_awareness" className="message">
 						<div className="picture-section">
 							<img
 								src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
@@ -234,7 +240,6 @@ const Chat = () => {
 					</Link>
 				</div>
 			</main>
-			<Outlet />
 		</>
 	);
 };

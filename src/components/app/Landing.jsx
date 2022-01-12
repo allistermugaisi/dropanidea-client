@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { Sidebar, Navbar } from './index';
+import React, { useState, Fragment } from 'react';
+import io from 'socket.io-client';
+import { Sidebar, Navbar, Routes, Home } from './index';
 import '../../public/css/Landing.css';
+
+const socket = io();
 
 const Landing = () => {
 	const [toggled, setToggled] = useState(false);
@@ -11,6 +13,10 @@ const Landing = () => {
 	const handleClickAway = () => {
 		setOpen(false);
 	};
+
+	socket.on('message', (message) => {
+		console.log(message);
+	});
 
 	const onClick = () => setOpen(!open);
 
@@ -23,7 +29,7 @@ const Landing = () => {
 	};
 
 	return (
-		<>
+		<Fragment>
 			<Sidebar toggled={toggled} handleDrawerToggle={handleDrawerToggle} />
 			<div className="home_content">
 				<Navbar
@@ -34,10 +40,9 @@ const Landing = () => {
 					open={open}
 					onClick={onClick}
 				/>
-				{/* <Routes /> */}
-				<Outlet />
+				<Routes />
 			</div>
-		</>
+		</Fragment>
 	);
 };
 

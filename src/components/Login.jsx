@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import AdornedButton from '../utils/AdornedButton';
+import { loginUser } from '../store/actions/auth-actions';
 import '../public/css/Login.css';
 
 const Login = () => {
+	const dispatch = useDispatch();
+	const history = useHistory();
+	const location = useLocation();
+
+	let auth = useSelector((state) => state.auth);
+	let { from } = location.state || { from: { pathname: '/' } };
+
 	const [showPassword, setShowPassword] = useState(false);
 	const [buttonLoading, setButtonLoading] = useState(false);
 
@@ -24,10 +33,18 @@ const Login = () => {
 		setShowPassword((prevShowPassword) => !prevShowPassword);
 
 	const onSubmit = async (data, e) => {
+		setButtonLoading(true);
 		e.preventDefault();
-		// setButtonLoading(true);
-		// await dispatch(loginUser(data));
+		await dispatch(loginUser(data));
+		setButtonLoading(false);
 	};
+
+	useEffect(() => {
+		if (auth.isAuthenticated) {
+			history.push('/');
+		}
+	}, [auth.isAuthenticated]);
+
 	return (
 		<section className="login-section">
 			<div className="login-container">

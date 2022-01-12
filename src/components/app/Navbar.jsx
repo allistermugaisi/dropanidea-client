@@ -33,13 +33,7 @@ const Navbar = ({
 										<Link to="#">Drop an idea</Link>
 									</li>
 									<li>
-										<Link to="#">Most discussed ideas</Link>
-									</li>
-									<li>
 										<Link to="#">Forward idea</Link>
-									</li>
-									<li>
-										<Link to="#">Most rated idea</Link>
 									</li>
 								</ul>
 							</li>

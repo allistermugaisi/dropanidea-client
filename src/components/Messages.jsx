@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+
 // import Picker from 'emoji-picker-react';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -9,12 +11,23 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import { TextField, Popover, Typography } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import { TextField, Popover, Typography, IconButton } from '@mui/material';
 import '../public/css/Messages.css';
 
 const Messages = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [chosenEmoji, setChosenEmoji] = useState(null);
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		mode: 'all',
+		shouldUnregister: true,
+		shouldFocusError: true,
+	});
 
 	const onEmojiClick = (event, emojiObject) => {
 		setChosenEmoji(emojiObject);
@@ -30,6 +43,12 @@ const Messages = () => {
 
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
+
+	const onSubmit = async (data, e) => {
+		e.preventDefault();
+		console.log(data);
+	};
+
 	return (
 		<>
 			<div className="container-desktop">
@@ -42,7 +61,7 @@ const Messages = () => {
 									className="pp"
 								/>
 								<h2>DropAnIdea</h2>
-								<span>active</span>
+								<span>active </span>
 							</div>
 							<div className="right">
 								<VideocamIcon
@@ -192,30 +211,42 @@ const Messages = () => {
 						</div>
 					</div>
 
-					<div className="chat-footer">
-						<InsertEmoticonIcon className="emo" style={{ cursor: 'pointer' }} />
-						{/* <Picker onEmojiClick={onEmojiClick} /> */}
-						<AttachFileIcon
-							className="emo-1"
-							style={{
-								cursor: 'pointer',
-							}}
-						/>
-						<TextField
-							fullWidth
-							variant="standard"
-							id="outlined-multiline-static"
-							multiline
-							margin="normal"
-							placeholder="Type a message"
-						/>
-						{/* <div className="icons">
-						<PhotoCameraIcon
-							style={{ fontSize: '1.5rem', cursor: 'pointer' }}
-						/>
-					</div> */}
-						<KeyboardVoiceIcon className="mic" />
-					</div>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<div className="chat-footer">
+							<IconButton>
+								<InsertEmoticonIcon style={{ cursor: 'pointer' }} />
+							</IconButton>
+
+							<IconButton>
+								<AttachFileIcon
+									style={{
+										cursor: 'pointer',
+									}}
+								/>
+							</IconButton>
+							<TextField
+								{...register('message', {
+									required: 'Kindly, type your message...',
+
+									shouldFocus: true,
+								})}
+								fullWidth
+								variant="standard"
+								id="outlined-multiline-static"
+								// multiline
+								margin="normal"
+								placeholder="Type a message"
+								error={errors?.message ? true : false}
+								// helperText={errors?.message?.message}
+							/>
+							<IconButton type="submit">
+								<SendIcon />
+							</IconButton>
+							<IconButton>
+								<KeyboardVoiceIcon />
+							</IconButton>
+						</div>
+					</form>
 				</div>
 			</div>
 
@@ -406,6 +437,9 @@ const Messages = () => {
 							style={{ fontSize: '1.5rem', cursor: 'pointer' }}
 						/>
 					</div> */}
+						<IconButton>
+							<SendIcon />
+						</IconButton>
 						<KeyboardVoiceIcon className="mic" />
 					</div>
 				</div>

@@ -6,3 +6,35 @@
 		visibility: visible;
 	}
 }
+
+.split {
+	height: 100%;
+	width: 50%;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	overflow-x: hidden;
+	padding-top: 20px;
+}
+
+.split .right {
+	right: 0;
+	background: url('https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641852010/85237_zogi8b.jpg');
+	background-size: cover;
+	/* width: 60%; */
+	background-repeat: no-repeat;
+	opacity: 0.4;
+}
+.split .centered {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+/* Style the image inside the centered container, if needed */
+.split .centered img {
+	width: 150px;
+	border-radius: 50%;
+}
