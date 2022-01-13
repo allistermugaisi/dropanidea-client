@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
-import { TextField, MenuItem } from '@mui/material';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import {
+	TextField,
+	MenuItem,
+	RadioGroup,
+	Radio,
+	FormControlLabel,
+	FormLabel,
+	FormControl,
+} from '@mui/material';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import AdornedButton from '../utils/AdornedButton';
@@ -34,9 +42,11 @@ const roles = [
 const Register = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
+	const location = useLocation();
 
 	let auth = useSelector((state) => state.auth);
 	let error = useSelector((state) => state.error);
+	let { from } = location.state || { from: { pathname: '/' } };
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -64,14 +74,12 @@ const Register = () => {
 	const onSubmit = async (data, e) => {
 		e.preventDefault();
 		setButtonLoading(true);
-		e.preventDefault();
 		await dispatch(registerUser(data));
-		setButtonLoading(false);
 	};
 
 	useEffect(() => {
 		if (auth.isAuthenticated) {
-			history.push('/');
+			history.replace(from);
 		}
 	}, [auth.isAuthenticated]);
 
@@ -101,6 +109,20 @@ const Register = () => {
 				<div className="content">
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="user-details">
+							<TextField
+								{...register('company_name', {
+									required: 'Company is required!',
+									shouldFocus: true,
+								})}
+								name="company_name"
+								fullWidth
+								style={{ marginBottom: '1rem' }}
+								autoComplete="off"
+								label="Your Company"
+								placeholder="Zinnia Global Consultancy"
+								error={errors?.company_name ? true : false}
+								helperText={errors?.company_name?.message}
+							/>
 							<div className="input-box">
 								<TextField
 									{...register('name', {
@@ -209,26 +231,33 @@ const Register = () => {
 								/>
 							</div>
 						</div>
-						<div className="gender-details">
-							<input type="radio" name="gender" id="dot-1" />
-							<input type="radio" name="gender" id="dot-2" />
-							<input type="radio" name="gender" id="dot-3" />
-							<span className="gender-title">Gender</span>
-							<div className="category">
-								<label htmlFor="dot-1">
-									<span className="dot one"></span>
-									<span className="gender">Male</span>
-								</label>
-								<label htmlFor="dot-2">
-									<span className="dot two"></span>
-									<span className="gender">Female</span>
-								</label>
-								<label htmlFor="dot-3">
-									<span className="dot three"></span>
-									<span className="gender">Prefer not to say</span>
-								</label>
-							</div>
-						</div>
+
+						<FormControl component="fieldset">
+							<FormLabel component="legend">Gender</FormLabel>
+							<RadioGroup row>
+								<FormControlLabel
+									{...register('gender')}
+									value="Female"
+									control={<Radio />}
+									name="gender"
+									label="Female"
+								/>
+								<FormControlLabel
+									{...register('gender')}
+									value="Male"
+									control={<Radio />}
+									name="gender"
+									label="Male"
+								/>
+								<FormControlLabel
+									{...register('gender')}
+									value="Other"
+									control={<Radio />}
+									name="gender"
+									label="Other"
+								/>
+							</RadioGroup>
+						</FormControl>
 
 						<AdornedButton
 							fullWidth

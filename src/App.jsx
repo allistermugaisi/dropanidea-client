@@ -14,7 +14,7 @@ import {
 	Messages,
 	PageNotFound,
 } from './components';
-import PrivateRoute from './middleware/PrivateRoute';
+import { PrivateRoute } from './middleware';
 import { Landing } from './components/app';
 
 // null   Anyone can access route

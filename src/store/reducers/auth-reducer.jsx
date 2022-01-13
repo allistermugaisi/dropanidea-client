@@ -10,7 +10,7 @@ import {
 } from '../../constants/types';
 
 const initialState = {
-	isAuthenticated: !!localStorage.getItem('token'),
+	isAuthenticated: !!localStorage.getItem('userToken'),
 	isTopLevelManager: false,
 	isMiddleLevelManager: false,
 	isLowLevelManager: false,

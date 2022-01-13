@@ -11,6 +11,7 @@ import {
 	clearErrors,
 	registerFail,
 	loginFail,
+	authError,
 } from './error-actions';
 
 const USERS_AUTH = 'https://zinniaglobalconsultancy.com/api/v1/auth';
@@ -19,7 +20,7 @@ const USERS_AUTH = 'https://zinniaglobalconsultancy.com/api/v1/auth';
 
 export const tokenConfig = () => {
 	// Get token from localStorage
-	const token = localStorage.getItem('token');
+	const token = localStorage.getItem('userToken');
 	// console.log(token);
 
 	// Headers
@@ -39,14 +40,29 @@ export const tokenConfig = () => {
 
 // Check token and Auth user
 
-export const auth = async () => {
-	const response = await axios.get(`${USERS_AUTH}/profile`, tokenConfig());
-	const data = await response.data;
+export const auth = () => async (dispatch) => {
+	const token = tokenConfig();
+	try {
+		const response = await axios.get(`${USERS_AUTH}/profile`, token);
+		const data = await response.data;
+		console.log(data);
 
-	return {
-		type: AUTH_USER,
-		payload: data,
-	};
+		await dispatch({
+			type: AUTH_USER,
+			payload: data,
+		});
+	} catch (error) {
+		console.log(error.response.data);
+		dispatch(
+			returnErrors(
+				error.response.data,
+				error.response.status,
+				'AUTHENTICATION_FAIL'
+			)
+		);
+		dispatch(authError());
+		localStorage.removeItem('userToken');
+	}
 };
 
 // Register User
@@ -97,6 +113,7 @@ export const registerUser = (payload) => async (dispatch) => {
 			returnErrors(error.response.data, error.response.status, 'REGISTER_FAIL')
 		);
 		dispatch(registerFail());
+		localStorage.removeItem('userToken');
 	}
 };
 
@@ -133,6 +150,7 @@ export const loginUser = (payload) => async (dispatch) => {
 			returnErrors(error.response.data, error.response.status, 'LOGIN_FAIL')
 		);
 		dispatch(loginFail());
+		localStorage.removeItem('userToken');
 	}
 };
 

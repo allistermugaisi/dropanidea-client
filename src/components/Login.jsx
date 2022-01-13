@@ -42,7 +42,7 @@ const Login = () => {
 
 	useEffect(() => {
 		if (auth.isAuthenticated) {
-			history.push('/');
+			history.replace(from);
 		}
 	}, [auth.isAuthenticated]);
 
