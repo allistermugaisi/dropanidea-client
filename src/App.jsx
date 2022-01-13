@@ -1,5 +1,6 @@
 import { Switch, Route } from 'react-router-dom';
-import { SocketProvider } from './context/SocketProvider';
+import { Toaster } from 'react-hot-toast';
+// import { SocketProvider } from './context/SocketProvider';
 import './App.css';
 import {
 	Login,
@@ -24,7 +25,7 @@ const App = () => {
 	const id = Math.random();
 
 	return (
-		<SocketProvider id={id}>
+		<>
 			<Switch>
 				<PrivateRoute exact path="/" component={Welcome} />
 				<PrivateRoute exact path="/dashboard" component={Landing} />
@@ -36,7 +37,8 @@ const App = () => {
 				<Route path="/register" component={Register} />
 				<Route path="*" component={PageNotFound} />
 			</Switch>
-		</SocketProvider>
+			<Toaster position="top-center" />
+		</>
 	);
 };
 

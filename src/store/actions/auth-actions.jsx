@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import {
 	AUTH_USER,
 	LOGIN_SUCCESS,
@@ -88,9 +89,10 @@ export const registerUser = (payload) => async (dispatch) => {
 				type: REGISTER_SUCCESS,
 				payload: data,
 			});
+			toast.success('You are now registered successfully!');
+			toast.success('Kindly await your Psychometric Test!');
 		}
 	} catch (error) {
-		console.log(error);
 		dispatch(
 			returnErrors(error.response.data, error.response.status, 'REGISTER_FAIL')
 		);
@@ -122,8 +124,10 @@ export const loginUser = (payload) => async (dispatch) => {
 				type: LOGIN_SUCCESS,
 				payload: data,
 			});
-			localStorage.setItem('token', data.token);
+			localStorage.setItem('userToken', data.token);
+			toast.success('Successfully logged in!');
 		}
+		dispatch(clearErrors());
 	} catch (error) {
 		dispatch(
 			returnErrors(error.response.data, error.response.status, 'LOGIN_FAIL')
@@ -133,8 +137,10 @@ export const loginUser = (payload) => async (dispatch) => {
 };
 
 // Logout User
-export const logOut = () => {
-	return {
+export const logOut = () => (dispatch) => {
+	localStorage.removeItem('userToken');
+	toast.success('Successfully logged out!');
+	dispatch({
 		type: LOGOUT_SUCCESS,
-	};
+	});
 };

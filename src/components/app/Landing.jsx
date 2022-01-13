@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { Sidebar, Navbar, Routes, Home } from './index';
 import '../../public/css/Landing.css';
 
-const socket = io('https://zinniaglobalconsultancy.com');
+// const socket = io('https://zinniaglobalconsultancy.com');
 
 const Landing = () => {
 	const [toggled, setToggled] = useState(false);
@@ -14,9 +14,9 @@ const Landing = () => {
 		setOpen(false);
 	};
 
-	socket.on('message', (message) => {
-		console.log(message);
-	});
+	// socket.on('message', (message) => {
+	// 	console.log(message);
+	// });
 
 	const onClick = () => setOpen(!open);
 

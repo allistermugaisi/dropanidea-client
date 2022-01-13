@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import AdornedButton from '../utils/AdornedButton';
 import { loginUser } from '../store/actions/auth-actions';
 import '../public/css/Login.css';
@@ -13,6 +14,7 @@ const Login = () => {
 	const location = useLocation();
 
 	let auth = useSelector((state) => state.auth);
+	let error = useSelector((state) => state.error);
 	let { from } = location.state || { from: { pathname: '/' } };
 
 	const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +38,6 @@ const Login = () => {
 		setButtonLoading(true);
 		e.preventDefault();
 		await dispatch(loginUser(data));
-		setButtonLoading(false);
 	};
 
 	useEffect(() => {
@@ -44,6 +45,14 @@ const Login = () => {
 			history.push('/');
 		}
 	}, [auth.isAuthenticated]);
+
+	useEffect(() => {
+		// Check for login error
+		if (error.id === 'LOGIN_FAIL') {
+			setButtonLoading(false);
+			toast.error('Invalid login credentials!');
+		}
+	}, [error]);
 
 	return (
 		<section className="login-section">

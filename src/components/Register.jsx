@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { TextField, MenuItem } from '@mui/material';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import AdornedButton from '../utils/AdornedButton';
 import { registerUser } from '../store/actions/auth-actions';
 import '../public/css/Register.css';
@@ -32,6 +33,10 @@ const roles = [
 
 const Register = () => {
 	const dispatch = useDispatch();
+	const history = useHistory();
+
+	let auth = useSelector((state) => state.auth);
+	let error = useSelector((state) => state.error);
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -63,6 +68,23 @@ const Register = () => {
 		await dispatch(registerUser(data));
 		setButtonLoading(false);
 	};
+
+	useEffect(() => {
+		if (auth.isAuthenticated) {
+			history.push('/');
+		}
+	}, [auth.isAuthenticated]);
+
+	useEffect(() => {
+		// Check for register error
+		if (error.id === 'REGISTER_FAIL') {
+			setButtonLoading(false);
+			toast.error('User already Registered!');
+		} else {
+			setButtonLoading(false);
+		}
+	}, [error]);
+
 	return (
 		<section className="register-section">
 			<div className="register-container">
