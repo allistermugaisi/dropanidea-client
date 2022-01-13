@@ -3,16 +3,16 @@ import { useDispatch } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 
 // import Profile from '../../assets/images/profile.jpg';
-// import { logOut } from '../../store/actions/auth';
+import { logOut } from '../../store/actions/auth-actions';
 
 const Sidebar = ({ toggled, handleDrawerToggle }) => {
 	const dispatch = useDispatch();
 	const [click, setClick] = useState(false);
 
 	const handleClick = () => setClick(!click);
-	// const signOut = () => {
-	// 	dispatch(logOut());
-	// };
+	const signOut = () => {
+		dispatch(logOut());
+	};
 	return (
 		<>
 			<div className={toggled ? 'sidebar active' : 'sidebar'}>
@@ -85,7 +85,7 @@ const Sidebar = ({ toggled, handleDrawerToggle }) => {
 								<div className="job">Top Level Manager</div>
 							</div>
 						</div>
-						<i className="bx bx-log-out" id="log_out"></i>
+						<i className="bx bx-log-out" onClick={signOut} id="log_out"></i>
 					</div>
 				</div>
 			</div>
