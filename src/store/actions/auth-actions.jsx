@@ -71,6 +71,7 @@ export const registerUser = (payload) => async (dispatch) => {
 	const {
 		username,
 		name,
+		company_name,
 		email,
 		gender,
 		role,
@@ -90,6 +91,7 @@ export const registerUser = (payload) => async (dispatch) => {
 		const body = JSON.stringify({
 			username,
 			name,
+			company_name,
 			email,
 			gender,
 			role,
