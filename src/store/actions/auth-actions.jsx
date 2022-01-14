@@ -164,3 +164,43 @@ export const logOut = () => (dispatch) => {
 		type: LOGOUT_SUCCESS,
 	});
 };
+
+// Forgot password
+export const forgotPassword = (payload) => async (dispatch) => {
+	const { email, new_password } = payload;
+
+	try {
+		// Headers
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		// Request body
+		const body = JSON.stringify({ email, new_password });
+
+		const response = await axios.post(
+			`${USERS_AUTH}/forgot-password`,
+			body,
+			config
+		);
+
+		const data = await response.data;
+
+		if (data) {
+			await dispatch({
+				type: RESET_PASSWORD_SUCCESS,
+				payload: data,
+			});
+			toast.success('Password reset successfully!');
+		}
+		dispatch(clearErrors());
+	} catch (error) {
+		dispatch(
+			returnErrors(error.response.data, error.response.status, 'RESET_FAIL')
+		);
+		// dispatch(loginFail());
+		localStorage.removeItem('userToken');
+	}
+};

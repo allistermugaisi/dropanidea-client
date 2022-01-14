@@ -11,6 +11,7 @@ import {
 	ContentLanding,
 	ChatLanding,
 	PsychometricTest,
+	ForgotPassword,
 	Messages,
 	PageNotFound,
 } from './components';
@@ -35,6 +36,7 @@ const App = () => {
 				<PrivateRoute path="/ideas/:ideaId" component={Chat} />
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
+				<Route path="/forgot_password" component={ForgotPassword} />
 				<Route path="*" component={PageNotFound} />
 			</Switch>
 			<Toaster position="top-center" />

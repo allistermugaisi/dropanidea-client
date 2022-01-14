@@ -6,12 +6,15 @@ import {
 	LOGIN_FAIL,
 	LOGOUT_SUCCESS,
 	REGISTER_SUCCESS,
+	RESET_PASSWORD_SUCCESS,
+	RESET_FAIL,
 	REGISTER_FAIL,
 } from '../../constants/types';
 
 const initialState = {
 	isAuthenticated: !!localStorage.getItem('userToken'),
 	isTopLevelManager: false,
+	isResetPassword: false,
 	isMiddleLevelManager: false,
 	isLowLevelManager: false,
 	isBusinessOwner: false,
@@ -44,10 +47,20 @@ export default function AuthReducer(state = initialState, action) {
 				isAdmin: false,
 				isLoading: false,
 			};
+		case RESET_PASSWORD_SUCCESS:
+			return {
+				...state,
+				...action.payload,
+				isResetPassword: true,
+				isAuthenticated: false,
+				isAdmin: false,
+				isLoading: false,
+			};
 		case AUTH_ERROR:
 		case LOGIN_FAIL:
 		case LOGOUT_SUCCESS:
 		case REGISTER_FAIL:
+		case RESET_FAIL:
 			return {
 				...state,
 				user: null,

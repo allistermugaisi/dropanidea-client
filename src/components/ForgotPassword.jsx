@@ -5,8 +5,8 @@ import { TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import AdornedButton from '../utils/AdornedButton';
-import { loginUser } from '../store/actions/auth-actions';
-import '../public/css/Login.css';
+import { forgotPassword } from '../store/actions/auth-actions';
+import '../public/css/ForgotPassword.css';
 
 const Login = () => {
 	const dispatch = useDispatch();
@@ -37,27 +37,27 @@ const Login = () => {
 	const onSubmit = async (data, e) => {
 		setButtonLoading(true);
 		e.preventDefault();
-		await dispatch(loginUser(data));
+		await dispatch(forgotPassword(data));
 	};
 
 	useEffect(() => {
-		if (auth.isAuthenticated) {
+		if (auth.isResetPassword) {
 			// history.replace(from);
-			history.push('/psychometric_test');
+			history.push('/login');
 		}
-	}, [auth.isAuthenticated]);
+	}, [auth.reset]);
 
 	useEffect(() => {
 		// Check for login error
-		if (error.id === 'LOGIN_FAIL') {
+		if (error.id === 'RESET_FAIL') {
 			setButtonLoading(false);
-			toast.error('Invalid login credentials!');
+			toast.error('User with given email does not exist!');
 		}
 	}, [error]);
 
 	return (
-		<section className="login-section">
-			<div className="login-container">
+		<section className="forgot-section">
+			<div className="forgot-container">
 				<div className="wrapper">
 					<div className="title">
 						<div className="logo-container">
@@ -67,7 +67,7 @@ const Login = () => {
 								alt=""
 							/>
 						</div>
-						<span>Login</span>
+						<span>Reset Password</span>
 					</div>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<TextField
@@ -90,8 +90,8 @@ const Login = () => {
 						/>
 
 						<TextField
-							{...register('password', {
-								required: 'Password is required!',
+							{...register('new_password', {
+								required: 'New Password is required!',
 								minLength: {
 									value: 8,
 									message: 'Password should be atleast 8 characters',
@@ -99,17 +99,14 @@ const Login = () => {
 							})}
 							style={{ marginBottom: '.8rem' }}
 							fullWidth
-							name="password"
+							name="new_password"
 							type={showPassword ? 'text' : 'password'}
-							label="Password"
+							label="New Password"
 							autoComplete="off"
-							error={errors?.password ? true : false}
-							helperText={errors?.password?.message}
+							error={errors?.new_password ? true : false}
+							helperText={errors?.new_password?.message}
 						/>
 
-						<div className="forgot">
-							<Link to="/forgot_password">Forgot password?</Link>
-						</div>
 						<AdornedButton
 							fullWidth
 							disableElevation
@@ -121,10 +118,10 @@ const Login = () => {
 							loading={buttonLoading}
 							variant="contained"
 						>
-							Login
+							Reset Password
 						</AdornedButton>
 						<div className="signup-link">
-							Not a member? <Link to="/register">Create an account</Link>
+							Remember password? <Link to="/login">Back to Login</Link>
 						</div>
 					</form>
 				</div>
