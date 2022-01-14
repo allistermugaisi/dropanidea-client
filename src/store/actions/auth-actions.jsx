@@ -45,7 +45,7 @@ export const auth = () => async (dispatch) => {
 	try {
 		const response = await axios.get(`${USERS_AUTH}/profile`, token);
 		const data = await response.data;
-		console.log(data);
+		// console.log(data);
 
 		await dispatch({
 			type: AUTH_USER,

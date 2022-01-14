@@ -15,7 +15,7 @@ const Login = () => {
 
 	let auth = useSelector((state) => state.auth);
 	let error = useSelector((state) => state.error);
-	let { from } = location.state || { from: { pathname: '/' } };
+	let { from } = location.state || { from: { pathname: '/psychometric_test' } };
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [buttonLoading, setButtonLoading] = useState(false);
@@ -42,7 +42,8 @@ const Login = () => {
 
 	useEffect(() => {
 		if (auth.isAuthenticated) {
-			history.replace(from);
+			// history.replace(from);
+			history.push('/psychometric_test');
 		}
 	}, [auth.isAuthenticated]);
 

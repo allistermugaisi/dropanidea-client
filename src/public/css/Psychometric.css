@@ -1,0 +1,7 @@
+.psychometric-container {
+	min-height: 100vh;
+	background: rgba(30, 31, 83);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
