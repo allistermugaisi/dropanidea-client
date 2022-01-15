@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import { PrivateRoute } from '../middleware';
 import {
 	// Sidebar chat ideas components
 	Messages,
@@ -9,27 +10,28 @@ import {
 const routes = [
 	// Sidebar routes
 	{
-		path: ``,
+		path: `/ideas`,
 		exact: true,
 		content: () => <ChatLanding />,
 	},
 	{
-		path: `/:ideaId`,
-		exact: true,
+		path: `/ideas/:ideaId`,
+		exact: false,
 		content: () => <Messages />,
 	},
 ];
 
-const ChatRoute = ({ params }) => {
-	console.log(params);
-	const exact = false;
+const ChatRoute = () => {
 	return (
 		<Switch>
-			{params === 1 ? (
-				<Route path={``} exact={exact} component={ChatLanding} />
-			) : (
-				<Route path={``} exact={exact} component={Messages} />
-			)}
+			{routes.map((route, index) => (
+				<PrivateRoute
+					key={index}
+					path={route.path}
+					exact={route.exact}
+					component={route.content}
+				/>
+			))}
 		</Switch>
 	);
 };

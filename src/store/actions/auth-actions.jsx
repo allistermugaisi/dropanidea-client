@@ -180,7 +180,7 @@ export const forgotPassword = (payload) => async (dispatch) => {
 		// Request body
 		const body = JSON.stringify({ email, new_password });
 
-		const response = await axios.post(
+		const response = await axios.put(
 			`${USERS_AUTH}/forgot-password`,
 			body,
 			config

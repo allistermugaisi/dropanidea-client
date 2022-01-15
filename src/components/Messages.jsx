@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-// import Picker from 'emoji-picker-react';
+import InputEmoji from 'react-input-emoji';
+import useMutationObserver from '@rooks/use-mutation-observer';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import VideocamIcon from '@mui/icons-material/Videocam';
@@ -16,8 +17,10 @@ import { TextField, Popover, Typography, IconButton } from '@mui/material';
 import '../public/css/Messages.css';
 
 const Messages = () => {
+	const { ideaId } = useParams();
+	const messageRef = useRef();
 	const [anchorEl, setAnchorEl] = useState(null);
-	const [chosenEmoji, setChosenEmoji] = useState(null);
+	const [text, setText] = useState('');
 
 	const {
 		register,
@@ -29,9 +32,9 @@ const Messages = () => {
 		shouldFocusError: true,
 	});
 
-	const onEmojiClick = (event, emojiObject) => {
-		setChosenEmoji(emojiObject);
-	};
+	useMutationObserver(messageRef, () => {
+		messageRef.current.scrollTop = messageRef.current.scrollHeight;
+	});
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -49,6 +52,10 @@ const Messages = () => {
 		console.log(data);
 	};
 
+	const sendMessage = (text) => {
+		console.log('Message', text);
+	};
+
 	return (
 		<>
 			<div className="container-desktop">
@@ -61,7 +68,7 @@ const Messages = () => {
 									className="pp"
 								/>
 								<h2>DropAnIdea</h2>
-								<span>active </span>
+								<span>active {ideaId}</span>
 							</div>
 							<div className="right">
 								<VideocamIcon
@@ -100,7 +107,7 @@ const Messages = () => {
 							</div>
 						</div>
 					</div>
-					<div className="chat-box">
+					<div className="chat-box" ref={messageRef}>
 						<div className="chat-r">
 							<div className="sp"></div>
 							<div className="mess mess-r">
@@ -110,88 +117,16 @@ const Messages = () => {
 								</p>
 								<div className="check">
 									<span>4:00 PM</span>
-									{/* <img src="img/check-2.png" /> */}
 								</div>
 							</div>
 						</div>
 						<div className="chat-l">
 							<div className="mess">
 								<p>
-									Oh! hi
-									{/* <img src="img/emoji-2.png" className="emoji" /> */}
-								</p>
-								<div className="check">
-									<span>4:00 PM</span>
-								</div>
-							</div>
-							<div className="sp"></div>
-						</div>
-
-						<div className="chat-r">
-							<div className="sp"></div>
-							<div className="mess mess-r">
-								<p>How are you doing?</p>
-								<div className="check">
-									<span>4:00 PM</span>
-									{/* <img src="img/check-2.png" /> */}
-								</div>
-							</div>
-						</div>
-						<div className="chat-l">
-							<div className="mess">
-								<p>I'm doing alright. How about you?</p>
-								<div className="check">
-									<span>4:00 PM</span>
-								</div>
-							</div>
-							<div className="sp"></div>
-						</div>
-
-						<div className="chat-r">
-							<div className="sp"></div>
-							<div className="mess mess-r">
-								<p>Not too bad. The weather is great isn't it?</p>
-								<div className="check">
-									<span>4:00 PM</span>
-									{/* <img src="img/check-2.png" /> */}
-								</div>
-							</div>
-						</div>
-						<div className="chat-l">
-							<div className="mess">
-								<p>Yes. It's absolutely beautiful today.</p>
-								<div className="check">
-									<span>4:00 PM</span>
-								</div>
-							</div>
-							<div className="sp"></div>
-						</div>
-
-						<div className="chat-r">
-							<div className="sp"></div>
-							<div className="mess mess-r">
-								{/* <img src="img/post2.jpg" className="img_chat" /> */}
-								<div className="check">
-									<span>4:00 PM</span>
-									{/* <img src="img/check-2.png" /> */}
-								</div>
-							</div>
-						</div>
-						<div className="chat-r">
-							<div className="sp"></div>
-							<div className="mess mess-r">
-								<p>I wish it was like this more frequently.</p>
-								<div className="check">
-									<span>4:00 PM</span>
-									{/* <img src="img/check-2.png" /> */}
-								</div>
-							</div>
-						</div>
-						<div className="chat-l">
-							<div className="mess">
-								<p>
-									Me too.
-									{/* <img src="img/heart.png" className="emoji" /> */}
+									Oh! hi, Lorem ipsum dolor sit amet consectetur adipisicing
+									elit. Voluptates sapiente tempore quod praesentium nemo porro
+									nulla quisquam iste dolorum adipisci nesciunt, officia rem
+									optio harum alias ad enim ipsa necessitatibus?
 								</p>
 								<div className="check">
 									<span>4:00 PM</span>
@@ -202,10 +137,13 @@ const Messages = () => {
 						<div className="chat-r">
 							<div className="sp"></div>
 							<div className="mess mess-r">
-								<p>So where are you going now?</p>
+								<img
+									src="https://res.cloudinary.com/dgisuffs0/image/upload/q_auto/v1641287485/http_3A_2F_2Fcdn.cnn.com_2Fcnnnext_2Fdam_2Fassets_2F210316172018-03-asian-americans-beauty-industry-restricted_hqy1xe.jpg"
+									className="img_chat"
+								/>
 								<div className="check">
 									<span>4:00 PM</span>
-									{/* <img src="img/check-1.png" /> */}
+									<img src="" />
 								</div>
 							</div>
 						</div>
@@ -214,6 +152,17 @@ const Messages = () => {
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="chat-footer">
 							<IconButton>
+								<KeyboardVoiceIcon />
+							</IconButton>
+							<InputEmoji
+								type="text"
+								value={text}
+								onChange={setText}
+								cleanOnEnter
+								onEnter={sendMessage}
+								placeholder=""
+							/>
+							{/* <IconButton>
 								<InsertEmoticonIcon style={{ cursor: 'pointer' }} />
 							</IconButton>
 
@@ -238,12 +187,9 @@ const Messages = () => {
 								placeholder="Type a message"
 								error={errors?.message ? true : false}
 								// helperText={errors?.message?.message}
-							/>
+							/> */}
 							<IconButton type="submit">
 								<SendIcon />
-							</IconButton>
-							<IconButton>
-								<KeyboardVoiceIcon />
 							</IconButton>
 						</div>
 					</form>

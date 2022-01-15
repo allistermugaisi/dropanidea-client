@@ -6,7 +6,7 @@
 
 @media screen and (min-width: 1024px) {
 	.container-desktop {
-		width: 60%;
+		width: 65%;
 		display: block;
 	}
 }
@@ -83,7 +83,7 @@
 }
 
 .chat-box {
-	/* background: url('../img/bg.jpeg'); */
+	background: url('https://res.cloudinary.com/dgisuffs0/image/upload/q_auto/v1642204654/whatsapp__default_rticvw.png');
 	background-attachment: fixed;
 	padding-left: 20px;
 	overflow-y: scroll;
@@ -160,11 +160,10 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-radius: 60px;
 	position: relative;
 	padding: 0 20px;
 	cursor: pointer;
-	background: #fff;
+	background: #f0f0f0;
 	transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 	box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
 		0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);

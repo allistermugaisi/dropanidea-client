@@ -51,7 +51,7 @@ const Login = () => {
 		// Check for login error
 		if (error.id === 'RESET_FAIL') {
 			setButtonLoading(false);
-			toast.error('User with given email does not exist!');
+			toast.error('User with given email address does not exist!');
 		}
 	}, [error]);
 
