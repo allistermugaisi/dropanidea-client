@@ -1,6 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
 import InputEmoji from 'react-input-emoji';
 import useMutationObserver from '@rooks/use-mutation-observer';
@@ -13,14 +15,58 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import SendIcon from '@mui/icons-material/Send';
-import { TextField, Popover, Typography, IconButton } from '@mui/material';
+import {
+	TextField,
+	Popover,
+	Typography,
+	IconButton,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Grid,
+	Paper,
+	Button,
+} from '@mui/material';
 import '../public/css/Messages.css';
 
+const ZinniaGlobalConsultancy = 'https://zinniaglobalconsultancy.com';
+
+const tokenConfig = () => {
+	// Get token from localStorage
+	const token = localStorage.getItem('userToken');
+	// console.log(token);
+
+	// Headers
+	const config = {
+		headers: {
+			'content-Type': 'application/json',
+		},
+	};
+
+	// if token, add to headers
+	if (token) {
+		config.headers['Authorization'] = `Bearer ${token}`;
+	}
+
+	return config;
+};
+
 const Messages = () => {
+	let auth = useSelector((state) => state.auth);
+	let reduxStoredUserId = auth?.user?.current_user?._id;
+
+	const token = tokenConfig();
 	const { ideaId } = useParams();
 	const messageRef = useRef();
-	const [anchorEl, setAnchorEl] = useState(null);
+
 	const [text, setText] = useState('');
+	const [userId, setUserId] = useState('');
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [roomName, setRoomName] = useState('');
+	const [isIdeaActive, setIsIdeaActive] = useState(false);
+	const [messages, setMessages] = useState([]);
 
 	const {
 		register,
@@ -35,6 +81,29 @@ const Messages = () => {
 	useMutationObserver(messageRef, () => {
 		messageRef.current.scrollTop = messageRef.current.scrollHeight;
 	});
+
+	useEffect(() => {
+		fetchDiscussions();
+	}, [ideaId]);
+
+	const fetchDiscussions = async () => {
+		if (ideaId) {
+			const response = await axios.get(
+				`${ZinniaGlobalConsultancy}/api/v1/ideas/${ideaId}`,
+				token
+			);
+			const data = await response.data;
+
+			// console.log(data[0]?.discussions[creator]);
+			setUserId(data[0]?.creator);
+			setRoomName(data[0]?.title);
+			setIsIdeaActive(data[0]?.isIdeaActive);
+			if (data) {
+				// console.log(data[0].discussions);
+				setMessages(data[0].discussions);
+			}
+		}
+	};
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -52,9 +121,12 @@ const Messages = () => {
 		console.log(data);
 	};
 
-	const sendMessage = (text) => {
-		console.log('Message', text);
+	const sendMessage = (data) => {
+		console.log(data);
 	};
+
+	// console.log(userId);
+	// console.log(reduxStoredUserId);
 
 	return (
 		<>
@@ -67,8 +139,8 @@ const Messages = () => {
 									src="https://res.cloudinary.com/dgisuffs0/image/upload/q_auto/v1641758237/logoz-trans_2_usrpz6.png"
 									className="pp"
 								/>
-								<h2>DropAnIdea</h2>
-								<span>active {ideaId}</span>
+								<h2>{roomName}</h2>
+								<span>{isIdeaActive ? 'active' : 'inactive'}</span>
 							</div>
 							<div className="right">
 								<VideocamIcon
@@ -108,33 +180,40 @@ const Messages = () => {
 						</div>
 					</div>
 					<div className="chat-box" ref={messageRef}>
-						<div className="chat-r">
-							<div className="sp"></div>
-							<div className="mess mess-r">
-								<p>
-									{/* <img src="img/emoji-1.png" className="emoji" /> */}
-									Hi, Kate
-								</p>
-								<div className="check">
-									<span>4:00 PM</span>
-								</div>
-							</div>
-						</div>
-						<div className="chat-l">
-							<div className="mess">
-								<p>
-									Oh! hi, Lorem ipsum dolor sit amet consectetur adipisicing
-									elit. Voluptates sapiente tempore quod praesentium nemo porro
-									nulla quisquam iste dolorum adipisci nesciunt, officia rem
-									optio harum alias ad enim ipsa necessitatibus?
-								</p>
-								<div className="check">
-									<span>4:00 PM</span>
-								</div>
-							</div>
-							<div className="sp"></div>
-						</div>
-						<div className="chat-r">
+						{messages.length > 0 &&
+							messages.map((item) => {
+								const { _id, message, creator } = item;
+								return (
+									<Fragment key={_id}>
+										{creator === reduxStoredUserId ? (
+											<div className="chat-r">
+												<div className="sp"></div>
+												<div className="mess mess-r">
+													<p>
+														{/* <img src="img/emoji-1.png" className="emoji" /> */}
+														{message}
+													</p>
+													<div className="check">
+														<span>4:00 PM</span>
+													</div>
+												</div>
+											</div>
+										) : (
+											<div className="chat-l">
+												<div className="mess">
+													<p>{message}</p>
+													<div className="check">
+														<span>4:00 PM</span>
+													</div>
+												</div>
+												<div className="sp"></div>
+											</div>
+										)}
+									</Fragment>
+								);
+							})}
+
+						{/* <div className="chat-r">
 							<div className="sp"></div>
 							<div className="mess mess-r">
 								<img
@@ -146,7 +225,7 @@ const Messages = () => {
 									<img src="" />
 								</div>
 							</div>
-						</div>
+						</div> */}
 					</div>
 
 					<form onSubmit={handleSubmit(onSubmit)}>
@@ -156,6 +235,7 @@ const Messages = () => {
 							</IconButton>
 							<InputEmoji
 								type="text"
+								name="message"
 								value={text}
 								onChange={setText}
 								cleanOnEnter
@@ -242,11 +322,24 @@ const Messages = () => {
 										horizontal: 'right',
 									}}
 								>
-									<Typography sx={{ p: 1 }}>Chat info</Typography>
-									<Typography sx={{ p: 1 }}>Select messages</Typography>
-									<Typography sx={{ p: 1 }}>Search</Typography>
-									<Typography sx={{ p: 1 }}>Report</Typography>
-									<Typography sx={{ p: 1 }}>Close chat</Typography>
+									<Typography sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}>
+										Chat info
+									</Typography>
+									<Typography sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}>
+										Select messages
+									</Typography>
+									<Typography sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}>
+										Search
+									</Typography>
+									<Typography sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}>
+										Report
+									</Typography>
+									<Typography
+										style={{ marginBottom: '1rem' }}
+										sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+									>
+										Close chat
+									</Typography>
 								</Popover>
 							</div>
 						</div>

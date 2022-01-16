@@ -17,11 +17,11 @@
 	padding-top: 20px;
 }
 
-.split .right {
+.right-1 {
 	right: 0;
 	background: url('https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641852010/85237_zogi8b.jpg');
 	background-size: cover;
-	/* width: 60%; */
+	width: 65%;
 	background-repeat: no-repeat;
 	opacity: 0.4;
 }
@@ -31,6 +31,9 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	text-align: center;
+}
+.split .centered h2 {
+	font-size: 3rem;
 }
 
 /* Style the image inside the centered container, if needed */

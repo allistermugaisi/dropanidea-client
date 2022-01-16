@@ -90,7 +90,7 @@ const PsychometricTest = () => {
 					<Typography sx={{}}>{steps[activeStep].description}</Typography>
 					<FormControl sx={{ pl: 6, mt: 3 }} component="fieldset">
 						{steps[activeStep].options.map((option, index) => {
-							console.log(option);
+							// console.log(option);
 							return (
 								<RadioGroup key={index}>
 									<FormControlLabel

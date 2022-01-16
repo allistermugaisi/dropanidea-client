@@ -171,7 +171,7 @@ export const logOut = () => (dispatch) => {
 // Forgot password
 export const forgotPassword = (payload) => async (dispatch) => {
 	const { email, new_password } = payload;
-	console.log(payload);
+	// console.log(payload);
 
 	try {
 		// Headers
@@ -191,7 +191,7 @@ export const forgotPassword = (payload) => async (dispatch) => {
 		);
 
 		const data = await response.data;
-		console.log(data);
+		// console.log(data);
 
 		if (data) {
 			await dispatch({

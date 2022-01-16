@@ -690,6 +690,11 @@ emoji-mart@3.0.1:
     "@babel/runtime" "^7.0.0"
     prop-types "^15.6.0"
 
+emoji-picker-react@3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/emoji-picker-react/-/emoji-picker-react-3.4.1.tgz#9bf486ae5ba18b5d7becab7170fdc85ef16cc31b"
+  integrity sha512-/MAbx0VEoLWISqkzE/+06qxihKidr+KMK9VN4x4tpBPigHSGaMcLPzztQxNzHdXU/ti2v0LNiarSGYPSa+PGrw==
+
 engine.io-client@~6.1.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-6.1.1.tgz#800d4b9db5487d169686729e5bd887afa78d36b0"
@@ -1069,6 +1074,11 @@ minimist@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 ms@2.1.2:
   version "2.1.2"

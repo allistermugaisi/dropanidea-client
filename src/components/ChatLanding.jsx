@@ -5,7 +5,7 @@ function ChatLanding() {
 	return (
 		<div className="chat-landing">
 			<div className="container-chat">
-				<div className="split right">
+				<div className="split right-1">
 					<div className="centered">
 						<h2>No selected Idea</h2>
 					</div>
