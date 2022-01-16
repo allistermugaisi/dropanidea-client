@@ -5,6 +5,7 @@ import {
 	LOGIN_SUCCESS,
 	LOGOUT_SUCCESS,
 	REGISTER_SUCCESS,
+	RESET_PASSWORD_SUCCESS,
 } from '../../constants/types';
 import {
 	returnErrors,
@@ -115,6 +116,7 @@ export const registerUser = (payload) => async (dispatch) => {
 			returnErrors(error.response.data, error.response.status, 'REGISTER_FAIL')
 		);
 		dispatch(registerFail());
+		dispatch(clearErrors());
 		localStorage.removeItem('userToken');
 	}
 };
@@ -152,6 +154,7 @@ export const loginUser = (payload) => async (dispatch) => {
 			returnErrors(error.response.data, error.response.status, 'LOGIN_FAIL')
 		);
 		dispatch(loginFail());
+		dispatch(clearErrors());
 		localStorage.removeItem('userToken');
 	}
 };
@@ -168,6 +171,7 @@ export const logOut = () => (dispatch) => {
 // Forgot password
 export const forgotPassword = (payload) => async (dispatch) => {
 	const { email, new_password } = payload;
+	console.log(payload);
 
 	try {
 		// Headers
@@ -187,6 +191,7 @@ export const forgotPassword = (payload) => async (dispatch) => {
 		);
 
 		const data = await response.data;
+		console.log(data);
 
 		if (data) {
 			await dispatch({
@@ -200,7 +205,7 @@ export const forgotPassword = (payload) => async (dispatch) => {
 		dispatch(
 			returnErrors(error.response.data, error.response.status, 'RESET_FAIL')
 		);
-		// dispatch(loginFail());
+		dispatch(clearErrors());
 		localStorage.removeItem('userToken');
 	}
 };

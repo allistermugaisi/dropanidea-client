@@ -91,7 +91,7 @@ const Register = () => {
 		} else {
 			setButtonLoading(false);
 		}
-	}, [error]);
+	}, [error.id === 'REGISTER_FAIL']);
 
 	return (
 		<section className="register-section">

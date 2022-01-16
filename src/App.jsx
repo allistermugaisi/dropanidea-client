@@ -35,7 +35,7 @@ const App = () => {
 				<PrivateRoute path="/ideas" component={ChatSection} />
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
-				<Route path="/forgot_password" component={ForgotPassword} />
+				<Route path="/forgot-password" component={ForgotPassword} />
 				<Route path="*" component={PageNotFound} />
 			</Switch>
 			<Toaster position="top-center" />

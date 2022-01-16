@@ -44,8 +44,9 @@ const Login = () => {
 		if (auth.isResetPassword) {
 			// history.replace(from);
 			history.push('/login');
+			setButtonLoading(false);
 		}
-	}, [auth.reset]);
+	}, [auth.isResetPassword]);
 
 	useEffect(() => {
 		// Check for login error

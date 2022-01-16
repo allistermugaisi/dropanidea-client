@@ -44,6 +44,7 @@ const Login = () => {
 		if (auth.isAuthenticated) {
 			// history.replace(from);
 			history.push('/psychometric_test');
+			setButtonLoading(false);
 		}
 	}, [auth.isAuthenticated]);
 
@@ -52,8 +53,10 @@ const Login = () => {
 		if (error.id === 'LOGIN_FAIL') {
 			setButtonLoading(false);
 			toast.error('Invalid login credentials!');
+		} else {
+			setButtonLoading(false);
 		}
-	}, [error]);
+	}, [error.id === 'LOGIN_FAIL']);
 
 	return (
 		<section className="login-section">
@@ -108,7 +111,7 @@ const Login = () => {
 						/>
 
 						<div className="forgot">
-							<Link to="/forgot_password">Forgot password?</Link>
+							<Link to="/forgot-password">Forgot password?</Link>
 						</div>
 						<AdornedButton
 							fullWidth
