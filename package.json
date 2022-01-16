@@ -14,7 +14,7 @@
 		"@mui/styles": "^5.2.3",
 		"@rooks/use-mutation-observer": "^4.11.2",
 		"axios": "^0.24.0",
-		"emoji-picker-react": "3.4.1",
+		"emoji-mart": "^3.0.1",
 		"moment": "^2.29.1",
 		"react": "^17.0.2",
 		"react-countup": "^6.1.0",

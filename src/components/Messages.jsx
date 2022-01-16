@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 import InputEmoji from 'react-input-emoji';
 import useMutationObserver from '@rooks/use-mutation-observer';
@@ -29,6 +30,8 @@ import {
 	Paper,
 	Button,
 } from '@mui/material';
+import { Picker } from 'emoji-mart';
+import 'emoji-mart/css/emoji-mart.css';
 import '../public/css/Messages.css';
 
 const ZinniaGlobalConsultancy = 'https://zinniaglobalconsultancy.com';
@@ -67,6 +70,8 @@ const Messages = () => {
 	const [roomName, setRoomName] = useState('');
 	const [isIdeaActive, setIsIdeaActive] = useState(false);
 	const [messages, setMessages] = useState([]);
+	const [input, setInput] = useState('');
+	const [showEmojis, setShowEmojis] = useState(false);
 
 	const {
 		register,
@@ -118,11 +123,50 @@ const Messages = () => {
 
 	const onSubmit = async (data, e) => {
 		e.preventDefault();
-		console.log(data);
+		const { message } = data;
+		try {
+			// Headers
+			const config = {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			};
+
+			if (ideaId) {
+				// Request body
+				const body = JSON.stringify({
+					message,
+					ideaId,
+					tags: '',
+					selectedFile: '',
+					photoURL: '',
+				});
+
+				const response = await axios.post(
+					`${ZinniaGlobalConsultancy}/api/v1/discussions/create`,
+					body,
+					token
+				);
+
+				await response.data;
+				toast.success(`${message}`);
+				fetchDiscussions();
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const sendMessage = (data) => {
 		console.log(data);
+	};
+
+	const addEmoji = (e) => {
+		let sym = e.unified.split('-');
+		let codesArray = [];
+		sym.forEach((el) => codesArray.push('0x' + el));
+		let emoji = String.fromCodePoint(...codesArray);
+		setInput(input + emoji);
 	};
 
 	// console.log(userId);
@@ -227,13 +271,22 @@ const Messages = () => {
 							</div>
 						</div> */}
 					</div>
+					{showEmojis && (
+						<div>
+							<Picker onSelect={addEmoji} />
+						</div>
+					)}
 
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="chat-footer">
 							<IconButton>
 								<KeyboardVoiceIcon />
 							</IconButton>
-							<InputEmoji
+							<IconButton onClick={() => setShowEmojis(!showEmojis)}>
+								<InsertEmoticonIcon style={{ cursor: 'pointer' }} />
+							</IconButton>
+
+							{/* <InputEmoji
 								type="text"
 								name="message"
 								value={text}
@@ -241,9 +294,9 @@ const Messages = () => {
 								cleanOnEnter
 								onEnter={sendMessage}
 								placeholder=""
-							/>
+							/> */}
 							{/* <IconButton>
-								<InsertEmoticonIcon style={{ cursor: 'pointer' }} />
+								<InsertEmoticonIcon onClick={() => setShowEmojis(!showEmojis)} style={{ cursor: 'pointer' }} />
 							</IconButton>
 
 							<IconButton>
@@ -252,13 +305,15 @@ const Messages = () => {
 										cursor: 'pointer',
 									}}
 								/>
-							</IconButton>
+							</IconButton> */}
 							<TextField
 								{...register('message', {
 									required: 'Kindly, type your message...',
 
 									shouldFocus: true,
 								})}
+								// value={input}
+								// onChange={(e) => setInput(e.target.value)}
 								fullWidth
 								variant="standard"
 								id="outlined-multiline-static"
@@ -267,7 +322,7 @@ const Messages = () => {
 								placeholder="Type a message"
 								error={errors?.message ? true : false}
 								// helperText={errors?.message?.message}
-							/> */}
+							/>
 							<IconButton type="submit">
 								<SendIcon />
 							</IconButton>
