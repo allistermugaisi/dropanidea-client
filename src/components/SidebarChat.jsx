@@ -7,6 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import {
 	TextField,
 	Popover,
@@ -107,7 +108,35 @@ const SidebarChat = () => {
 	};
 
 	const onSubmit = async (data, e) => {
-		console.log(data);
+		const { title, description } = data;
+
+		try {
+			// Headers
+			const config = {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			};
+
+			// Request body
+			const body = JSON.stringify({
+				title,
+				description,
+			});
+
+			const response = await axios.post(
+				`${ZinniaGlobalConsultancy}/api/v1/ideas/create`,
+				body,
+				token
+			);
+
+			await response.data;
+			toast.success('Idea created successfully!');
+			fetchData();
+			handleCloseDialog();
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
@@ -290,45 +319,48 @@ const SidebarChat = () => {
 			</main>
 			<Dialog open={openPopup} onClose={handleCloseDialog}>
 				<DialogTitle>Create an Idea</DialogTitle>
-				<DialogContent>
-					<DialogContentText style={{ marginBottom: '.8rem' }}>
-						Do you have an idea that you want it to be discussed? Please proceed
-						and create your idea in the form below.
-					</DialogContentText>
-					<TextField
-						autoFocus
-						{...register('title', {
-							required: 'Title is required!',
-							shouldFocus: true,
-						})}
-						style={{ marginBottom: '.8rem' }}
-						name="title"
-						fullWidth
-						autoComplete="off"
-						label="Title"
-						placeholder="Market Strategy"
-						error={errors?.title ? true : false}
-						helperText={errors?.title?.message}
-					/>
-					<TextField
-						{...register('description', {
-							required: 'Description is required!',
-							shouldFocus: true,
-						})}
-						style={{ marginBottom: '.8rem' }}
-						name="description"
-						fullWidth
-						autoComplete="off"
-						label="Your description"
-						placeholder="Type your description"
-						error={errors?.description ? true : false}
-						helperText={errors?.description?.message}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleCloseDialog}>Cancel</Button>
-					<Button onClick={handleCloseDialog}>Create</Button>
-				</DialogActions>
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<DialogContent>
+						<DialogContentText style={{ marginBottom: '.8rem' }}>
+							Do you have an idea that you want it to be discussed? Please
+							proceed and create your idea in the form below.
+						</DialogContentText>
+
+						<TextField
+							autoFocus
+							{...register('title', {
+								required: 'Title is required!',
+								shouldFocus: true,
+							})}
+							style={{ marginBottom: '.8rem' }}
+							name="title"
+							fullWidth
+							autoComplete="off"
+							label="Title"
+							placeholder="Market Strategy"
+							error={errors?.title ? true : false}
+							helperText={errors?.title?.message}
+						/>
+						<TextField
+							{...register('description', {
+								required: 'Description is required!',
+								shouldFocus: true,
+							})}
+							style={{ marginBottom: '.8rem' }}
+							name="description"
+							fullWidth
+							autoComplete="off"
+							label="Your description"
+							placeholder="Type your description"
+							error={errors?.description ? true : false}
+							helperText={errors?.description?.message}
+						/>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleCloseDialog}>Cancel</Button>
+						<Button type="submit">Create</Button>
+					</DialogActions>
+				</form>
 			</Dialog>
 		</>
 	);
