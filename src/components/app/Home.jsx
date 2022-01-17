@@ -14,20 +14,19 @@ const Home = () => {
 				<div className="card-detail">
 					<h5 className="card-title">My Ideas</h5>
 					<div className="card-inner">
-						<span>Active 2</span>
-						<span>Forwarded 12</span>
+						<span>No active ideas</span>
 					</div>
 				</div>
 				<div className="card-detail">
 					<h5 className="card-title">Total Ideas</h5>
 					<div className="card-inner">
-						<span>568</span>
+						<span>0</span>
 					</div>
 				</div>
 				<div className="card-detail">
 					<h5 className="card-title">Top Ideas</h5>
 					<div className="card-inner">
-						<span>51</span>
+						<span>0</span>
 					</div>
 				</div>
 			</div>

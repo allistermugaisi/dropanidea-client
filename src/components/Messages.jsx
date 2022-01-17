@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import moment from 'moment';
 import toast from 'react-hot-toast';
 
 import InputEmoji from 'react-input-emoji';
@@ -224,9 +225,9 @@ const Messages = () => {
 						</div>
 					</div>
 					<div className="chat-box" ref={messageRef}>
-						{messages.length > 0 &&
+						{messages.length > 0 ? (
 							messages.map((item) => {
-								const { _id, message, creator } = item;
+								const { _id, message, creator, createdAt } = item;
 								return (
 									<Fragment key={_id}>
 										{creator === reduxStoredUserId ? (
@@ -238,7 +239,7 @@ const Messages = () => {
 														{message}
 													</p>
 													<div className="check">
-														<span>4:00 PM</span>
+														<span>{moment(createdAt).fromNow()}</span>
 													</div>
 												</div>
 											</div>
@@ -247,7 +248,7 @@ const Messages = () => {
 												<div className="mess">
 													<p>{message}</p>
 													<div className="check">
-														<span>4:00 PM</span>
+														<span>{moment(createdAt).fromNow()}</span>
 													</div>
 												</div>
 												<div className="sp"></div>
@@ -255,7 +256,18 @@ const Messages = () => {
 										)}
 									</Fragment>
 								);
-							})}
+							})
+						) : (
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									paddingTop: '150px',
+								}}
+							>
+								<h2>No Discussions available</h2>
+							</div>
+						)}
 
 						{/* <div className="chat-r">
 							<div className="sp"></div>

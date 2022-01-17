@@ -35,7 +35,7 @@ const Sidebar = ({ toggled, handleDrawerToggle }) => {
 						<input type="text" placeholder="Search..." />
 						<span className="tooltip">Search</span>
 					</li>
-					<li>
+					{/* <li>
 						<Link to="/dashboard">
 							<i className="bx bx-grid-alt"></i>
 							<span className="links_name">Home</span>
@@ -52,7 +52,7 @@ const Sidebar = ({ toggled, handleDrawerToggle }) => {
 							<span className="links_name">Users</span>
 						</NavLink>
 						<span className="tooltip">Users</span>
-					</li>
+					</li> */}
 					<li>
 						<NavLink to="/ideas" activeclassname="active" onClick={handleClick}>
 							<i className="bx bx-chat"></i>
@@ -60,18 +60,18 @@ const Sidebar = ({ toggled, handleDrawerToggle }) => {
 						</NavLink>
 						<span className="tooltip">Chat</span>
 					</li>
-					<li>
+					{/* <li>
 						<NavLink
 							to="/dashboard/reports"
 							activeclassname="active"
 							onClick={handleClick}
 						>
-							{/* <i className="bx bx-cog"></i> */}
+							<i className="bx bx-cog"></i>
 							<i className="bx bx-pie-chart-alt-2"></i>
 							<span className="links_name">Reports</span>
 						</NavLink>
 						<span className="tooltip">Reports</span>
-					</li>
+					</li> */}
 				</ul>
 				<div className="profile_content">
 					<div className="profile_dashboard">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Switch, Route } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -187,7 +188,7 @@ const SidebarChat = () => {
 					</div>
 				</div>
 				<div className="inbox-section">
-					{data?.length > 0 &&
+					{data?.length > 0 ? (
 						data.map((data) => {
 							const { _id, title, description, createdAt } = data;
 							return (
@@ -203,12 +204,28 @@ const SidebarChat = () => {
 										<div className="message-content">{description}</div>
 									</div>
 									<div className="date_time-section">
-										<div className="date_time">12:30pm</div>
-										<div className="num">25</div>
+										<div className="date_time">
+											{moment(createdAt).fromNow()}
+										</div>
+										{/* <div className="num"></div> */}
 									</div>
 								</Link>
 							);
-						})}
+						})
+					) : (
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								justifyContent: 'center',
+								paddingTop: '100px',
+							}}
+						>
+							<h3>Ideas Unavailable.</h3>
+							<p>Kindly, create an idea to enable discussions</p>
+						</div>
+					)}
 				</div>
 			</main>
 
