@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { useForm } from 'react-hook-form';
 import {
 	Table,
 	TableBody,
@@ -9,6 +10,13 @@ import {
 	TableHead,
 	TableRow,
 	Paper,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	TextField,
+	Button,
 } from '@mui/material';
 
 import '../../public/css/Home.css';
@@ -41,8 +49,18 @@ const Home = () => {
 	const dispatch = useDispatch();
 
 	const [ideas, setIdeas] = useState([]);
+	const [openPopup, setOpenPopup] = useState(false);
 
-	console.log(auth?.user?.current_user);
+	const {
+		register,
+		getValues,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		mode: 'all',
+		shouldUnregister: true,
+		shouldFocusError: true,
+	});
 
 	useEffect(() => {
 		fetchIdeas();
@@ -63,13 +81,54 @@ const Home = () => {
 			console.log(error);
 		}
 	};
+
+	const handleClickOpen = () => {
+		setOpenPopup(true);
+	};
+
+	const handleCloseDialog = () => {
+		setOpenPopup(false);
+	};
+
+	const onSubmit = async (data, e) => {
+		const { title, description } = data;
+
+		try {
+			// Headers
+			const config = {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			};
+
+			// Request body
+			const body = JSON.stringify({
+				title,
+				description,
+			});
+
+			const response = await axios.post(
+				`${ZinniaGlobalConsultancy}/api/v1/ideas/create`,
+				body,
+				token
+			);
+
+			await response.data;
+			toast.success('Idea created successfully!');
+			fetchData();
+			handleCloseDialog();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className="project-container">
 			<div className="card-content">
 				<div className="card-detail">
 					<h5 className="card-title">Drop An Idea</h5>
 					<div className="card-inner">
-						<span>Create</span>
+						<span onClick={handleClickOpen}>Create</span>
 					</div>
 				</div>
 				<div className="card-detail">
@@ -203,6 +262,51 @@ const Home = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			<Dialog open={openPopup} onClose={handleCloseDialog}>
+				<DialogTitle>Create an Idea</DialogTitle>
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<DialogContent>
+						<DialogContentText style={{ marginBottom: '.8rem' }}>
+							Do you have an idea that you want it to be discussed? Please
+							proceed and create your idea in the form below.
+						</DialogContentText>
+
+						<TextField
+							autoFocus
+							{...register('title', {
+								required: 'Title is required!',
+								shouldFocus: true,
+							})}
+							style={{ marginBottom: '.8rem' }}
+							name="title"
+							fullWidth
+							autoComplete="off"
+							label="Title"
+							placeholder="Market Strategy"
+							error={errors?.title ? true : false}
+							helperText={errors?.title?.message}
+						/>
+						<TextField
+							{...register('description', {
+								required: 'Description is required!',
+								shouldFocus: true,
+							})}
+							style={{ marginBottom: '.8rem' }}
+							name="description"
+							fullWidth
+							autoComplete="off"
+							label="Your description"
+							placeholder="Type your description"
+							error={errors?.description ? true : false}
+							helperText={errors?.description?.message}
+						/>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleCloseDialog}>Cancel</Button>
+						<Button type="submit">Create</Button>
+					</DialogActions>
+				</form>
+			</Dialog>
 		</div>
 	);
 };
