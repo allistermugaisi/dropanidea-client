@@ -42,7 +42,7 @@ const Home = () => {
 
 	const [ideas, setIdeas] = useState([]);
 
-	// console.log(auth?.user?.current_user?.ideas.length);
+	console.log(auth?.user?.current_user);
 
 	useEffect(() => {
 		fetchIdeas();
@@ -104,7 +104,7 @@ const Home = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{ideas.length > 0 &&
+							{ideas.length > 0 ? (
 								ideas.map((idea) => {
 									const { _id, title, description } = idea;
 
@@ -119,7 +119,17 @@ const Home = () => {
 											<TableCell align="left">{description}</TableCell>
 										</TableRow>
 									);
-								})}
+								})
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={12}
+										style={{ padding: '1rem', textAlign: 'center' }}
+									>
+										There are no recent ideas
+									</TableCell>
+								</TableRow>
+							)}
 						</TableBody>
 					</Table>
 				</TableContainer>
@@ -129,39 +139,36 @@ const Home = () => {
 						<TableHead>
 							<TableRow>
 								<TableCell>Title</TableCell>
+								<TableCell align="left">Description</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							<TableRow
-								sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-							>
-								<TableCell>Market Strategy</TableCell>
-							</TableRow>
+							{auth?.user?.current_user?.ideas.length ? (
+								auth?.user?.current_user?.ideas?.map((idea) => {
+									const { _id, title, description } = idea;
+									return (
+										<TableRow
+											key={_id}
+											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+										>
+											<TableCell>{title}</TableCell>
+											<TableCell>{description}</TableCell>
+										</TableRow>
+									);
+								})
+							) : (
+								<TableRow>
+									<TableCell
+										colSpan={12}
+										style={{ padding: '1rem', textAlign: 'center' }}
+									>
+										You have no Ideas
+									</TableCell>
+								</TableRow>
+							)}
 						</TableBody>
 					</Table>
 				</TableContainer>
-				{/* <div className="equipment-machinery">
-						<h4>Most Discussed Ideas</h4>
-					</div>
-					<div className="materials-usage-summary">
-						<h4>Live Discussions</h4>
-					</div> */}
-
-				{/* <div>
-					<div className="payment-history">
-						<h4>My Ideas</h4>
-						
-					</div>
-					<div className="work-schedule">
-						<h4>Active Users</h4>
-					</div>
-					<div className="project-reports">
-						<h4>Visualization</h4>
-					</div>
-					<div className="project-logs">
-						<h4>System Logs</h4>
-					</div>
-				</div> */}
 			</div>
 			<TableContainer component={Paper}>
 				<Table>
@@ -171,11 +178,28 @@ const Home = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						<TableRow
-							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-						>
-							<TableCell>Market Strategy</TableCell>
-						</TableRow>
+						{auth?.user?.current_user?.contributions.length ? (
+							auth?.user?.current_user?.contributions?.map((idea) => {
+								const { _id, message } = idea;
+								return (
+									<TableRow
+										key={_id}
+										sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+									>
+										<TableCell>{message}</TableCell>
+									</TableRow>
+								);
+							})
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={12}
+									style={{ padding: '1rem', textAlign: 'center' }}
+								>
+									You have no Contributions
+								</TableCell>
+							</TableRow>
+						)}
 					</TableBody>
 				</Table>
 			</TableContainer>
