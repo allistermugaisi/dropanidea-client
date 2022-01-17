@@ -43,7 +43,7 @@ const Login = () => {
 	useEffect(() => {
 		if (auth.isAuthenticated) {
 			// history.replace(from);
-			history.push('/ideas');
+			history.push('/psychometric_test');
 			setButtonLoading(false);
 		}
 	}, [auth.isAuthenticated]);

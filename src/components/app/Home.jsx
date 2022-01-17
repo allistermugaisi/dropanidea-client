@@ -128,7 +128,9 @@ const Home = () => {
 				<div className="card-detail">
 					<h5 className="card-title">Drop An Idea</h5>
 					<div className="card-inner">
-						<span onClick={handleClickOpen}>Create</span>
+						<span style={{ cursor: 'pointer' }} onClick={handleClickOpen}>
+							Create
+						</span>
 					</div>
 				</div>
 				<div className="card-detail">

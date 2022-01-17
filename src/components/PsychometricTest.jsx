@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useTheme } from '@mui/material/styles';
@@ -21,10 +23,36 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import '../public/css/Psychometric.css';
 
+const ZinniaGlobalConsultancy = 'https://zinniaglobalconsultancy.com';
+
+const tokenConfig = () => {
+	// Get token from localStorage
+	const token = localStorage.getItem('userToken');
+	// console.log(token);
+
+	// Headers
+	const config = {
+		headers: {
+			'content-Type': 'application/json',
+		},
+	};
+
+	// if token, add to headers
+	if (token) {
+		config.headers['Authorization'] = `Bearer ${token}`;
+	}
+
+	return config;
+};
+
 const PsychometricTest = () => {
+	const token = tokenConfig();
 	const theme = useTheme();
 	const history = useHistory();
+	let auth = useSelector((state) => state.auth);
+
 	const [activeStep, setActiveStep] = useState(0);
+	const [selectedValue, setSelectedValue] = useState('');
 	const maxSteps = steps.length;
 
 	const {
@@ -38,6 +66,14 @@ const PsychometricTest = () => {
 		shouldFocusError: true,
 	});
 
+	let isTestLength = auth?.user?.current_user?.psychometricTest.length;
+
+	useEffect(() => {
+		if (isTestLength >= 5) {
+			history.push('/ideas');
+		}
+	}, [isTestLength]);
+
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
@@ -46,12 +82,56 @@ const PsychometricTest = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
 	};
 
-	const approval = () => {
-		toast.success('kindly await approval for your feedback!');
-	};
-
 	const proceed = () => {
 		history.push('/');
+	};
+
+	const handleChange = async (event) => {
+		setSelectedValue(event.target.value);
+		const formData = {
+			question: event.target.name,
+			answer: event.target.value,
+		};
+
+		// Request body
+		const body = JSON.stringify({
+			question: formData.question,
+			answer: formData.answer,
+		});
+
+		if (
+			event.target.name === 'What do you prefer when collecting information?'
+		) {
+			const response = await axios.post(
+				`${ZinniaGlobalConsultancy}/api/v1/auth/psychometric-test`,
+				body,
+				token
+			);
+
+			const data = await response.data;
+
+			if (data) {
+				history.push('/ideas');
+				toast.success('Thank you for your feedback!');
+			}
+		} else {
+			try {
+				const response = await axios.post(
+					`${ZinniaGlobalConsultancy}/api/v1/auth/psychometric-test`,
+					body,
+					token
+				);
+
+				const data = await response.data;
+				console.log(data);
+				if (data) {
+					toast.success('Quiz answered successfully!');
+					handleNext();
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		}
 	};
 
 	return (
@@ -94,10 +174,12 @@ const PsychometricTest = () => {
 							return (
 								<RadioGroup key={index}>
 									<FormControlLabel
-										{...register('gender')}
-										value={option}
-										control={<Radio key={index} onClick={approval} />}
-										name="gender"
+										key={index}
+										checked={selectedValue === option.option}
+										value={option.option}
+										onChange={handleChange}
+										control={<Radio key={index} />}
+										name={option.question}
 										label={option.option}
 									/>
 								</RadioGroup>
@@ -111,47 +193,35 @@ const PsychometricTest = () => {
 					position="static"
 					sx={{ borderBottomLeftRadius: 7, borderBottomRightRadius: 7 }}
 					activeStep={activeStep}
-					nextButton={
-						<Button
-							size="small"
-							onClick={handleNext}
-							disabled={activeStep === maxSteps - 1}
-						>
-							Next
-							{theme.direction === 'rtl' ? (
-								<KeyboardArrowLeft />
-							) : (
-								<KeyboardArrowRight />
-							)}
-						</Button>
-					}
-					backButton={
-						<Button
-							size="small"
-							onClick={handleBack}
-							disabled={activeStep === 0}
-						>
-							{theme.direction === 'rtl' ? (
-								<KeyboardArrowRight />
-							) : (
-								<KeyboardArrowLeft />
-							)}
-							Back
-						</Button>
-					}
+					// nextButton={
+					// 	<Button
+					// 		size="small"
+					// 		onClick={handleNext}
+					// 		disabled={activeStep === maxSteps - 1}
+					// 	>
+					// 		Next
+					// 		{theme.direction === 'rtl' ? (
+					// 			<KeyboardArrowLeft />
+					// 		) : (
+					// 			<KeyboardArrowRight />
+					// 		)}
+					// 	</Button>
+					// }
+					// backButton={
+					// 	<Button
+					// 		size="small"
+					// 		onClick={handleBack}
+					// 		disabled={activeStep === 0}
+					// 	>
+					// 		{theme.direction === 'rtl' ? (
+					// 			<KeyboardArrowRight />
+					// 		) : (
+					// 			<KeyboardArrowLeft />
+					// 		)}
+					// 		Back
+					// 	</Button>
+					// }
 				/>
-				<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-					<Button
-						sx={{
-							backgroundColor: '#fff',
-							mt: 1,
-						}}
-						size="large"
-						onClick={proceed}
-					>
-						Continue
-					</Button>
-				</Box>
 			</Box>
 		</section>
 	);
@@ -167,21 +237,27 @@ const steps = [
 		options: [
 			{
 				option: 'Zucker burger',
+				question: `Who is your role model?`,
 			},
 			{
 				option: 'Mwai Kibaki',
+				question: `Who is your role model?`,
 			},
 			{
 				option: 'Raila Odinga',
+				question: `Who is your role model?`,
 			},
 			{
 				option: 'Kim Kadarshian',
+				question: `Who is your role model?`,
 			},
 			{
 				option: 'Martin Luther King Junior',
+				question: `Who is your role model?`,
 			},
 			{
 				option: 'Barack Obama',
+				question: `Who is your role model?`,
 			},
 		],
 	},
@@ -192,18 +268,23 @@ const steps = [
 		options: [
 			{
 				option: 'No one',
+				question: 'Who is the person that knows most of your secrets?',
 			},
 			{
 				option: 'Mother/Father',
+				question: 'Who is the person that knows most of your secrets?',
 			},
 			{
 				option: 'Siblings',
+				question: 'Who is the person that knows most of your secrets?',
 			},
 			{
 				option: 'A friend',
+				question: 'Who is the person that knows most of your secrets?',
 			},
 			{
 				option: 'A Stranger',
+				question: 'Who is the person that knows most of your secrets?',
 			},
 		],
 	},
@@ -214,39 +295,51 @@ const steps = [
 		options: [
 			{
 				option: 'Smart',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Kind',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Impulsive',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Quiet',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Reliable',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Bully',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Indifferent',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Relentless',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Ambitious',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Nagging',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Intelligent',
+				question: `What would your friends say about you?`,
 			},
 			{
 				option: 'Aggressive',
+				question: `What would your friends say about you?`,
 			},
 		],
 	},
@@ -257,15 +350,19 @@ const steps = [
 		options: [
 			{
 				option: 'Try to fix it on my own',
+				question: `If something in your house breaks, what is the first thing you do?`,
 			},
 			{
 				option: 'Call a professional',
+				question: `If something in your house breaks, what is the first thing you do?`,
 			},
 			{
 				option: 'Call a friend',
+				question: `If something in your house breaks, what is the first thing you do?`,
 			},
 			{
 				option: 'Try to ignore it',
+				question: `If something in your house breaks, what is the first thing you do?`,
 			},
 		],
 	},
@@ -276,30 +373,39 @@ const steps = [
 		options: [
 			{
 				option: 'A warm bath',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
 				option: 'Talking to a friend',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
 				option: 'Sports',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
 				option: 'Work',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
 				option: 'Praying',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
 				option: 'Hanging out',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
-				option: 'Walking outdorr',
+				option: 'Walking outdoor',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
 				option: 'Watching favorite programs',
+				question: `What is the ritual that helps you calm down?`,
 			},
 			{
 				option: 'Listening to music',
+				question: `What is the ritual that helps you calm down?`,
 			},
 		],
 	},
@@ -310,12 +416,15 @@ const steps = [
 		options: [
 			{
 				option: 'Reading',
+				question: `What do you prefer when collecting information?`,
 			},
 			{
 				option: 'Observing/Watching',
+				question: `What do you prefer when collecting information?`,
 			},
 			{
 				option: 'Listening',
+				question: `What do you prefer when collecting information?`,
 			},
 		],
 	},

@@ -112,7 +112,7 @@
 	background: #f7fcf6;
 	padding: 10px;
 	border-radius: 10px;
-	margin: 20px 0px;
+	margin: 10px 0px;
 	cursor: pointer;
 	transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 	box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),

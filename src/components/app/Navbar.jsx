@@ -32,9 +32,9 @@ const Navbar = ({
 									<li>
 										<Link to="#">Drop an idea</Link>
 									</li>
-									<li>
+									{/* <li>
 										<Link to="#">Forward idea</Link>
-									</li>
+									</li> */}
 								</ul>
 							</li>
 						</ul>
