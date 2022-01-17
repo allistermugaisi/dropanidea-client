@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 
 // import Profile from '../../assets/images/profile.jpg';
 import { logOut } from '../../store/actions/auth-actions';
 
 const Sidebar = ({ toggled, handleDrawerToggle }) => {
+	let auth = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 	const [click, setClick] = useState(false);
 
@@ -13,6 +14,7 @@ const Sidebar = ({ toggled, handleDrawerToggle }) => {
 	const signOut = () => {
 		dispatch(logOut());
 	};
+
 	return (
 		<>
 			<div className={toggled ? 'sidebar active' : 'sidebar'}>
@@ -81,8 +83,8 @@ const Sidebar = ({ toggled, handleDrawerToggle }) => {
 								alt="profile"
 							/>
 							<div className="name_job">
-								<div className="name">Janet Mbugua</div>
-								<div className="job">Top Level Manager</div>
+								<div className="name">{auth?.user?.current_user?.name}</div>
+								<div className="job">{auth?.user?.current_user?.role}</div>
 							</div>
 						</div>
 						<i className="bx bx-log-out" onClick={signOut} id="log_out"></i>

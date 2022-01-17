@@ -41,9 +41,9 @@
 	margin-bottom: 0.5rem;
 }
 .conclusive-content {
-	display: grid;
+	/* display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 15px;
+	gap: 15px; */
 	margin: 20px 0;
 }
 .cost-analysis {
