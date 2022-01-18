@@ -277,6 +277,7 @@ const SidebarChat = () => {
 								New idea
 							</Typography>
 							<Typography
+								onClick={signOut}
 								style={{ marginBottom: '1rem' }}
 								sx={{ pr: 2, pl: 2, pt: 1, cursor: 'pointer' }}
 							>
