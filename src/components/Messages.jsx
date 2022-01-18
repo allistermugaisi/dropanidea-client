@@ -17,6 +17,7 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import SendIcon from '@mui/icons-material/Send';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import {
 	TextField,
 	Popover,
@@ -66,14 +67,15 @@ const Messages = () => {
 	const messageRef = useRef();
 	const valueRef = useRef('');
 
-	const [text, setText] = useState('');
-	const [userId, setUserId] = useState('');
 	const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorEl2, setAnchorEl2] = useState(null);
+
 	const [roomName, setRoomName] = useState('');
 	const [isIdeaActive, setIsIdeaActive] = useState(false);
 	const [messages, setMessages] = useState([]);
 	const [input, setInput] = useState('');
 	const [showEmojis, setShowEmojis] = useState(false);
+	const [openedPopoverId, setOpenedPopoverId] = useState('');
 
 	const {
 		register,
@@ -102,7 +104,6 @@ const Messages = () => {
 			const data = await response.data;
 
 			// console.log(data[0]?.discussions[creator]);
-			setUserId(data[0]?.creator);
 			setRoomName(data[0]?.title);
 			setIsIdeaActive(data[0]?.isIdeaActive);
 			if (data) {
@@ -116,12 +117,24 @@ const Messages = () => {
 		setAnchorEl(event.currentTarget);
 	};
 
+	const handleClick2 = (event, _id) => {
+		setAnchorEl2(event.currentTarget);
+		setOpenedPopoverId(_id);
+	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
+	const handleClose2 = () => {
+		setAnchorEl2(null);
+	};
+
 	const open = Boolean(anchorEl);
+	const open2 = Boolean(anchorEl2);
+
 	const id = open ? 'simple-popover' : undefined;
+	const id2 = open2 ? 'simple-popover' : undefined;
 
 	const sendValue = async () => {
 		if (valueRef.current.value === '')
@@ -161,6 +174,12 @@ const Messages = () => {
 		sym.forEach((el) => codesArray.push('0x' + el));
 		let emoji = String.fromCodePoint(...codesArray);
 		setInput(input + emoji);
+	};
+
+	const onDelete = (_id, e) => {
+		e.preventDefault();
+		setMessages((state) => state.filter((message) => message._id !== _id));
+		toast.error('Message deleted successfully');
 	};
 
 	// console.log(userId);
@@ -224,15 +243,46 @@ const Messages = () => {
 								return (
 									<Fragment key={_id}>
 										{creator === reduxStoredUserId ? (
-											<div className="chat-r">
+											<div className="chat-r" key={_id}>
 												<div className="sp"></div>
 												<div className="mess mess-r">
-													<p>
-														{/* <img src="img/emoji-1.png" className="emoji" /> */}
-														{message}
-													</p>
+													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
+														<IconButton
+															onClick={(event) => handleClick2(event, _id)}
+														>
+															<ArrowDropDownIcon />
+														</IconButton>
+														<Popover
+															id={id2}
+															open={open2}
+															anchorEl={anchorEl2}
+															onClose={handleClose2}
+															anchorOrigin={{
+																vertical: 'bottom',
+																horizontal: 'right',
+															}}
+															transformOrigin={{
+																vertical: 'top',
+																horizontal: 'right',
+															}}
+														>
+															<Typography
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Reply
+															</Typography>
+															<Typography
+																style={{ marginBottom: '.8rem' }}
+																onClick={(event) =>
+																	onDelete(openedPopoverId, event)
+																}
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Delete
+															</Typography>
+														</Popover>
 													</div>
 												</div>
 											</div>
@@ -242,6 +292,40 @@ const Messages = () => {
 													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
+														<IconButton
+															onClick={(event) => handleClick2(event, _id)}
+														>
+															<ArrowDropDownIcon />
+														</IconButton>
+														<Popover
+															id={id2}
+															open={open2}
+															anchorEl={anchorEl2}
+															onClose={handleClose2}
+															anchorOrigin={{
+																vertical: 'bottom',
+																horizontal: 'right',
+															}}
+															transformOrigin={{
+																vertical: 'top',
+																horizontal: 'right',
+															}}
+														>
+															<Typography
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Reply
+															</Typography>
+															<Typography
+																style={{ marginBottom: '.8rem' }}
+																onClick={(event) =>
+																	onDelete(openedPopoverId, event)
+																}
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Delete
+															</Typography>
+														</Popover>
 													</div>
 												</div>
 												<div className="sp"></div>
@@ -399,6 +483,40 @@ const Messages = () => {
 													</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
+														<IconButton
+															onClick={(event) => handleClick2(event, _id)}
+														>
+															<ArrowDropDownIcon />
+														</IconButton>
+														<Popover
+															id={id2}
+															open={open2}
+															anchorEl={anchorEl2}
+															onClose={handleClose2}
+															anchorOrigin={{
+																vertical: 'bottom',
+																horizontal: 'right',
+															}}
+															transformOrigin={{
+																vertical: 'top',
+																horizontal: 'right',
+															}}
+														>
+															<Typography
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Reply
+															</Typography>
+															<Typography
+																style={{ marginBottom: '.8rem' }}
+																onClick={(event) =>
+																	onDelete(openedPopoverId, event)
+																}
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Delete
+															</Typography>
+														</Popover>
 													</div>
 												</div>
 											</div>
@@ -408,6 +526,40 @@ const Messages = () => {
 													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
+														<IconButton
+															onClick={(event) => handleClick2(event, _id)}
+														>
+															<ArrowDropDownIcon />
+														</IconButton>
+														<Popover
+															id={id2}
+															open={open2}
+															anchorEl={anchorEl2}
+															onClose={handleClose2}
+															anchorOrigin={{
+																vertical: 'bottom',
+																horizontal: 'right',
+															}}
+															transformOrigin={{
+																vertical: 'top',
+																horizontal: 'right',
+															}}
+														>
+															<Typography
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Reply
+															</Typography>
+															<Typography
+																style={{ marginBottom: '.8rem' }}
+																onClick={(event) =>
+																	onDelete(openedPopoverId, event)
+																}
+																sx={{ pr: 3, pl: 3, pt: 2, cursor: 'pointer' }}
+															>
+																Delete
+															</Typography>
+														</Popover>
 													</div>
 												</div>
 												<div className="sp"></div>
