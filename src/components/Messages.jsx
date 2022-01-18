@@ -358,7 +358,7 @@ const Messages = () => {
 									src="https://res.cloudinary.com/dgisuffs0/image/upload/q_auto/v1641758237/logoz-trans_2_usrpz6.png"
 									className="pp"
 								/>
-								<h2>{roomName}</h2>
+								<h4>{roomName}</h4>
 								<span>{isIdeaActive ? 'active' : 'inactive'}</span>
 							</div>
 							<div className="right">

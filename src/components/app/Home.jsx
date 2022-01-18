@@ -223,7 +223,7 @@ const Home = () => {
 										colSpan={12}
 										style={{ padding: '1rem', textAlign: 'center' }}
 									>
-										You have no Ideas
+										You have no ideas
 									</TableCell>
 								</TableRow>
 							)}
@@ -257,7 +257,7 @@ const Home = () => {
 									colSpan={12}
 									style={{ padding: '1rem', textAlign: 'center' }}
 								>
-									You have no Contributions
+									You have no contributions
 								</TableCell>
 							</TableRow>
 						)}
