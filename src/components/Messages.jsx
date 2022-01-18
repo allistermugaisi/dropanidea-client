@@ -64,6 +64,7 @@ const Messages = () => {
 	const token = tokenConfig();
 	const { ideaId } = useParams();
 	const messageRef = useRef();
+	const valueRef = useRef('');
 
 	const [text, setText] = useState('');
 	const [userId, setUserId] = useState('');
@@ -122,17 +123,13 @@ const Messages = () => {
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
 
-	const onSubmit = async (data, e) => {
-		e.preventDefault();
-		const { message } = data;
-		try {
-			// Headers
-			const config = {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
+	const sendValue = async () => {
+		if (valueRef.current.value === '')
+			return toast.error('Please type a message');
 
+		// console.log(valueRef.current.value);
+		const message = valueRef.current.value;
+		try {
 			if (ideaId) {
 				// Request body
 				const body = JSON.stringify({
@@ -156,10 +153,6 @@ const Messages = () => {
 		} catch (error) {
 			console.log(error);
 		}
-	};
-
-	const sendMessage = (data) => {
-		console.log(data);
 	};
 
 	const addEmoji = (e) => {
@@ -289,7 +282,7 @@ const Messages = () => {
 						</div>
 					)}
 
-					<form onSubmit={handleSubmit(onSubmit)}>
+					<form noValidate autoComplete="off">
 						<div className="chat-footer">
 							<IconButton>
 								<KeyboardVoiceIcon />
@@ -297,45 +290,24 @@ const Messages = () => {
 							<IconButton onClick={() => setShowEmojis(!showEmojis)}>
 								<InsertEmoticonIcon style={{ cursor: 'pointer' }} />
 							</IconButton>
-
-							{/* <InputEmoji
-								type="text"
-								name="message"
-								value={text}
-								onChange={setText}
-								cleanOnEnter
-								onEnter={sendMessage}
-								placeholder=""
-							/> */}
-							{/* <IconButton>
-								<InsertEmoticonIcon onClick={() => setShowEmojis(!showEmojis)} style={{ cursor: 'pointer' }} />
-							</IconButton>
-
-							<IconButton>
-								<AttachFileIcon
-									style={{
-										cursor: 'pointer',
-									}}
-								/>
-							</IconButton> */}
 							<TextField
-								{...register('message', {
-									required: 'Kindly, type your message...',
-
-									shouldFocus: true,
-								})}
-								// value={input}
-								// onChange={(e) => setInput(e.target.value)}
+								onKeyPress={(e) => {
+									if (e.key === 'Enter') {
+										e.preventDefault();
+										sendValue();
+									}
+								}}
+								value={input || ''} // to avoid warnings
+								onChange={(e) => setInput(e.target.value)}
 								fullWidth
 								variant="standard"
 								id="outlined-multiline-static"
 								// multiline
 								margin="normal"
 								placeholder="Type a message"
-								error={errors?.message ? true : false}
-								// helperText={errors?.message?.message}
+								inputRef={valueRef}
 							/>
-							<IconButton type="submit">
+							<IconButton onClick={sendValue}>
 								<SendIcon />
 							</IconButton>
 						</div>
@@ -358,7 +330,7 @@ const Messages = () => {
 									src="https://res.cloudinary.com/dgisuffs0/image/upload/q_auto/v1641758237/logoz-trans_2_usrpz6.png"
 									className="pp"
 								/>
-								<h4>{roomName}</h4>
+								<h2>{roomName}</h2>
 								<span>{isIdeaActive ? 'active' : 'inactive'}</span>
 							</div>
 							<div className="right">
@@ -457,35 +429,42 @@ const Messages = () => {
 						)}
 					</div>
 
-					<div className="chat-footer">
-						<IconButton>
-							<KeyboardVoiceIcon />
-						</IconButton>
-						<IconButton onClick={() => setShowEmojis(!showEmojis)}>
-							<InsertEmoticonIcon style={{ cursor: 'pointer' }} />
-						</IconButton>
+					{showEmojis && (
+						<div>
+							<Picker onSelect={addEmoji} />
+						</div>
+					)}
 
-						<TextField
-							{...register('message', {
-								required: 'Kindly, type your message...',
-
-								shouldFocus: true,
-							})}
-							// value={input}
-							// onChange={(e) => setInput(e.target.value)}
-							fullWidth
-							variant="standard"
-							id="outlined-multiline-static"
-							// multiline
-							margin="normal"
-							placeholder="Type a message"
-							error={errors?.message ? true : false}
-							// helperText={errors?.message?.message}
-						/>
-						<IconButton type="submit">
-							<SendIcon />
-						</IconButton>
-					</div>
+					<form noValidate autoComplete="off">
+						<div className="chat-footer">
+							<IconButton>
+								<KeyboardVoiceIcon />
+							</IconButton>
+							<IconButton onClick={() => setShowEmojis(!showEmojis)}>
+								<InsertEmoticonIcon style={{ cursor: 'pointer' }} />
+							</IconButton>
+							<TextField
+								onKeyPress={(e) => {
+									if (e.key === 'Enter') {
+										e.preventDefault();
+										sendValue();
+									}
+								}}
+								value={input || ''} // to avoid warnings
+								onChange={(e) => setInput(e.target.value)}
+								fullWidth
+								variant="standard"
+								id="outlined-multiline-static"
+								// multiline
+								margin="normal"
+								placeholder="Type a message"
+								inputRef={valueRef}
+							/>
+							<IconButton onClick={sendValue}>
+								<SendIcon />
+							</IconButton>
+						</div>
+					</form>
 				</div>
 			</div>
 		</>
