@@ -58,6 +58,7 @@ const SidebarChat = () => {
 	const [openPopup, setOpenPopup] = useState(false);
 
 	const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorEl2, setAnchorEl2] = useState(null);
 	const [data, setData] = useState([]);
 
 	const {
@@ -93,12 +94,23 @@ const SidebarChat = () => {
 		setAnchorEl(event.currentTarget);
 	};
 
+	const handleClick2 = (event) => {
+		setAnchorEl2(event.currentTarget);
+	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
+	const handleClose2 = () => {
+		setAnchorEl2(null);
+	};
+
 	const open = Boolean(anchorEl);
+	const open2 = Boolean(anchorEl2);
+
 	const id = open ? 'simple-popover' : undefined;
+	const id2 = open2 ? 'simple-popover' : undefined;
 
 	const handleClickOpen = () => {
 		setOpenPopup(true);
@@ -240,15 +252,15 @@ const SidebarChat = () => {
 					<div className="messages-title">Ideas</div>
 					<div className="buttons">
 						<MoreVertIcon
-							onClick={handleClick}
+							onClick={handleClick2}
 							className="icon"
 							style={{ color: '#fff', cursor: 'pointer' }}
 						/>
-						{/* <Popover
-							id={id}
-							open={open}
-							anchorEl={anchorEl}
-							onClose={handleClose}
+						<Popover
+							id={id2}
+							open={open2}
+							anchorEl={anchorEl2}
+							onClose={handleClose2}
 							anchorOrigin={{
 								vertical: 'bottom',
 								horizontal: 'right',
@@ -259,79 +271,59 @@ const SidebarChat = () => {
 							}}
 						>
 							<Typography
-								// onClick={handleClickOpen}
-								sx={{ p: 1, cursor: 'pointer' }}
+								onClick={handleClickOpen}
+								sx={{ pr: 2, pl: 2, pt: 1, cursor: 'pointer' }}
 							>
 								New idea
 							</Typography>
-							<Typography sx={{ p: 1, cursor: 'pointer' }}>Log out</Typography>
-						</Popover> */}
+							<Typography
+								style={{ marginBottom: '1rem' }}
+								sx={{ pr: 2, pl: 2, pt: 1, cursor: 'pointer' }}
+							>
+								Log out
+							</Typography>
+						</Popover>
 					</div>
 				</div>
 				<div className="inbox-section">
-					<Link to="/ideas/product_launch" className="message">
-						<div className="picture-section">
-							<img
-								src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
-								alt=""
-							/>
+					{data?.length > 0 ? (
+						data.map((data) => {
+							const { _id, title, description, createdAt } = data;
+							return (
+								<Link key={_id} to={`/ideas/${_id}`} className="message">
+									<div className="picture-section">
+										<img
+											src="https://res.cloudinary.com/dgisuffs0/image/upload/q_auto/v1642310534/chat_bphqfc.svg"
+											alt=""
+										/>
+									</div>
+									<div className="content-section">
+										<div className="name">{title}</div>
+										<div className="message-content">{description}</div>
+									</div>
+									<div className="date_time-section">
+										<div className="date_time">
+											{moment(createdAt).fromNow()}
+										</div>
+										{/* <div className="num"></div> */}
+									</div>
+								</Link>
+							);
+						})
+					) : (
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								justifyContent: 'center',
+								paddingTop: '100px',
+							}}
+						>
+							<h3>Ideas Unavailable.</h3>
+							<p>Kindly, create an idea to enable discussions</p>
 						</div>
-						<div className="content-section">
-							<div className="name">Product Launch</div>
-							<div className="message-content">
-								Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								Necessitatibus iusto harum neque exercitationem quibusdam dolor
-								nostrum autem minima nisi, officia corporis cumque distinctio a
-								nobis aspernatur dicta iure tempora. Unde?
-							</div>
-						</div>
-						<div className="date_time-section">
-							<div className="date_time">12:00 pm</div>
-							<div className="num">25</div>
-						</div>
-					</Link>
-					<Link to="/ideas/marketing_survey" className="message">
-						<div className="picture-section">
-							<img
-								src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
-								alt=""
-							/>
-						</div>
-						<div className="content-section">
-							<div className="name">Marketing Strategy</div>
-							<div className="message-content">
-								Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								Necessitatibus iusto harum neque exercitationem quibusdam dolor
-								nostrum autem minima nisi, officia corporis cumque distinctio a
-								nobis aspernatur dicta iure tempora. Unde?
-							</div>
-						</div>
-						<div className="date_time-section">
-							<div className="date_time">02:45 am</div>
-							<div className="num">8</div>
-						</div>
-					</Link>
-					<Link to="/ideas/brand_awareness" className="message">
-						<div className="picture-section">
-							<img
-								src="https://res.cloudinary.com/yugillc/image/upload/q_auto/v1641770389/chat-app-profile/profile_b1qtok.png"
-								alt=""
-							/>
-						</div>
-						<div className="content-section">
-							<div className="name">Brand Awareness</div>
-							<div className="message-content">
-								Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								Necessitatibus iusto harum neque exercitationem quibusdam dolor
-								nostrum autem minima nisi, officia corporis cumque distinctio a
-								nobis aspernatur dicta iure tempora. Unde?
-							</div>
-						</div>
-						<div className="date_time-section">
-							<div className="date_time">04:30 pm</div>
-							<div className="num">18</div>
-						</div>
-					</Link>
+					)}
 				</div>
 			</main>
 			<Dialog open={openPopup} onClose={handleCloseDialog}>

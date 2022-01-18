@@ -11,6 +11,7 @@
 	display: flex;
 	gap: 0.1rem;
 }
+/* Desktop View Responsive */
 @media screen and (min-width: 1024px) {
 	.sidebar-desktop {
 		position: relative;
@@ -18,7 +19,7 @@
 		height: auto;
 		display: block;
 	}
-	.no-sidebar-mobile {
+	.sidebar-mobile {
 		position: relative;
 		width: 100%;
 		height: auto;
@@ -40,13 +41,14 @@
 /* Mobile View Responsive */
 @media screen and (max-width: 1024px) {
 	.section-desktop {
-		display: none;
+		display: block;
 	}
 	.sidebar-mobile {
 		position: relative;
 		width: 100%;
 		height: auto;
 		display: block;
+		z-index: -5;
 	}
 	.no-sidebar-mobile {
 		display: none;
