@@ -7,6 +7,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -52,14 +53,16 @@ const SidebarChat = () => {
 	const dispatch = useDispatch();
 	const token = tokenConfig();
 	let auth = useSelector((state) => state.auth);
-	let userLevel = auth?.user?.current_user?.role;
+	let reduxStoredUserId = auth?.user?.current_user?._id;
 	// console.log(userLevel);
 
 	const [openPopup, setOpenPopup] = useState(false);
+	const [openPopupInfo, setOpenPopupInfo] = useState(false);
 
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [anchorEl2, setAnchorEl2] = useState(null);
 	const [data, setData] = useState([]);
+	const [currentData, setCurrentData] = useState([]);
 
 	const {
 		register,
@@ -116,8 +119,18 @@ const SidebarChat = () => {
 		setOpenPopup(true);
 	};
 
+	const handleClickOpenInfo = (event, data) => {
+		event.preventDefault();
+		setOpenPopupInfo(true);
+		setCurrentData(data);
+	};
+
 	const handleCloseDialog = () => {
 		setOpenPopup(false);
+	};
+
+	const handleCloseInfoDialog = () => {
+		setOpenPopupInfo(false);
 	};
 
 	const onSubmit = async (data, e) => {
@@ -147,6 +160,29 @@ const SidebarChat = () => {
 			toast.success('Idea created successfully!');
 			fetchData();
 			handleCloseDialog();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const onDelete = async (e, data) => {
+		e.preventDefault();
+		const { _id } = data;
+
+		try {
+			if (_id) {
+				const response = await axios.delete(
+					`${ZinniaGlobalConsultancy}/api/v1/ideas/${_id}`,
+					token
+				);
+
+				const data = await response.data;
+				toast.error('Idea deleted successfully');
+				if (data) {
+					setData((state) => state.filter((idea) => idea._id !== _id));
+					fetchData();
+				}
+			}
 		} catch (error) {
 			console.log(error);
 		}
@@ -202,7 +238,8 @@ const SidebarChat = () => {
 				<div className="inbox-section">
 					{data?.length > 0 ? (
 						data.map((data) => {
-							const { _id, title, description, createdAt } = data;
+							const { _id, title, description, createdAt, conceptualist } =
+								data;
 							return (
 								<Link key={_id} to={`/ideas/${_id}`} className="message">
 									<div className="picture-section">
@@ -219,7 +256,28 @@ const SidebarChat = () => {
 										<div className="date_time">
 											{moment(createdAt).fromNow()}
 										</div>
-										{/* <div className="num"></div> */}
+										{/* <div className="num">9</div> */}
+										<ArrowDropDownIcon />
+										<div className="dropdown-content">
+											<Typography
+												onClick={(event) => handleClickOpenInfo(event, data)}
+												sx={{
+													cursor: 'pointer',
+												}}
+											>
+												Info
+											</Typography>
+											{reduxStoredUserId === conceptualist._id && (
+												<Typography
+													onClick={(event) => onDelete(event, data)}
+													sx={{
+														cursor: 'pointer',
+													}}
+												>
+													Delete
+												</Typography>
+											)}
+										</div>
 									</div>
 								</Link>
 							);
@@ -371,6 +429,17 @@ const SidebarChat = () => {
 						<Button type="submit">Create</Button>
 					</DialogActions>
 				</form>
+			</Dialog>
+			<Dialog open={openPopupInfo} onClose={handleCloseInfoDialog}>
+				<DialogTitle>{currentData.title}</DialogTitle>
+				<DialogContent>
+					<DialogContentText style={{ marginBottom: '.8rem' }}>
+						{currentData.description}
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleCloseInfoDialog}>Close</Button>
+				</DialogActions>
 			</Dialog>
 		</>
 	);

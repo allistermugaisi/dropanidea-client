@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import {
@@ -162,6 +163,7 @@ const Home = () => {
 							<TableRow>
 								<TableCell>Title</TableCell>
 								<TableCell align="left">Description</TableCell>
+								<TableCell align="center">Action</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -178,6 +180,16 @@ const Home = () => {
 										>
 											<TableCell>{title}</TableCell>
 											<TableCell align="left">{description}</TableCell>
+											<TableCell align="left">
+												<Button>
+													<Link
+														style={{ textDecoration: 'none' }}
+														to={`/ideas/${_id}`}
+													>
+														Discuss
+													</Link>
+												</Button>
+											</TableCell>
 										</TableRow>
 									);
 								})
