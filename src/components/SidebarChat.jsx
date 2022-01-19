@@ -347,26 +347,54 @@ const SidebarChat = () => {
 				<div className="inbox-section">
 					{data?.length > 0 ? (
 						data.map((data) => {
-							const { _id, title, description, createdAt } = data;
+							const { _id, title, description, createdAt, conceptualist } =
+								data;
 							return (
-								<Link key={_id} to={`/ideas/${_id}`} className="message">
+								<div key={_id} className="message">
+									{/* <Link to={`/ideas/${_id}`}> */}
 									<div className="picture-section">
 										<img
 											src="https://res.cloudinary.com/dgisuffs0/image/upload/q_auto/v1642310534/chat_bphqfc.svg"
 											alt=""
 										/>
 									</div>
-									<div className="content-section">
+									<Link
+										style={{ textDecoration: 'none' }}
+										to={`/ideas/${_id}`}
+										className="content-section"
+									>
 										<div className="name">{title}</div>
 										<div className="message-content">{description}</div>
-									</div>
+									</Link>
+									{/* </Link> */}
 									<div className="date_time-section">
 										<div className="date_time">
 											{moment(createdAt).fromNow()}
 										</div>
 										{/* <div className="num"></div> */}
+										<ArrowDropDownIcon />
+										<div className="dropdown-content">
+											<Typography
+												onClick={(event) => handleClickOpenInfo(event, data)}
+												sx={{
+													cursor: 'pointer',
+												}}
+											>
+												Info
+											</Typography>
+											{reduxStoredUserId === conceptualist._id && (
+												<Typography
+													onClick={(event) => onDelete(event, data)}
+													sx={{
+														cursor: 'pointer',
+													}}
+												>
+													Delete
+												</Typography>
+											)}
+										</div>
 									</div>
-								</Link>
+								</div>
 							);
 						})
 					) : (
