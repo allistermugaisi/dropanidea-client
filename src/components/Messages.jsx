@@ -458,9 +458,28 @@ const Messages = () => {
 													</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
-														<IconButton>
-															<ArrowDropDownIcon />
-														</IconButton>
+														{creator === reduxStoredUserId && (
+															<>
+																<ArrowDropDownIcon />
+																<div className="dropdown-content-right">
+																	{/* <Typography
+																		sx={{
+																			cursor: 'pointer',
+																		}}
+																	>
+																		Reply
+																	</Typography> */}
+																	<Typography
+																		onClick={(event) => onDelete(_id, event)}
+																		sx={{
+																			cursor: 'pointer',
+																		}}
+																	>
+																		Delete
+																	</Typography>
+																</div>
+															</>
+														)}
 													</div>
 												</div>
 											</div>
@@ -470,9 +489,16 @@ const Messages = () => {
 													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
-														<IconButton>
-															<ArrowDropDownIcon />
-														</IconButton>
+														{/* <ArrowDropDownIcon />
+														<div className="dropdown-content">
+															<Typography
+																sx={{
+																	cursor: 'pointer',
+																}}
+															>
+																Reply
+															</Typography>
+														</div> */}
 													</div>
 												</div>
 												<div className="sp"></div>
