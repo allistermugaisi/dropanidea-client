@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
 	TextField,
+	MenuItem,
 	Popover,
 	Typography,
 	IconButton,
@@ -49,6 +50,33 @@ const tokenConfig = () => {
 	return config;
 };
 
+const roles = [
+	{
+		value: 'Global',
+		label: 'Global (All levels)',
+	},
+	{
+		value: 'Normal staff',
+		label: 'Normal staff',
+	},
+	{
+		value: 'Business owner',
+		label: 'Business owner',
+	},
+	{
+		value: 'Top Level Manager',
+		label: 'Top Level Manager',
+	},
+	{
+		value: 'Middle Level Manager',
+		label: 'Middle Level Manager',
+	},
+	{
+		value: 'Low Level Manager',
+		label: 'Low Level Manager',
+	},
+];
+
 const SidebarChat = () => {
 	const dispatch = useDispatch();
 	const token = tokenConfig();
@@ -63,6 +91,8 @@ const SidebarChat = () => {
 	const [anchorEl2, setAnchorEl2] = useState(null);
 	const [data, setData] = useState([]);
 	const [currentData, setCurrentData] = useState([]);
+
+	const [selectedRole, setSelectedRole] = useState('Normal staff');
 
 	const {
 		register,
@@ -91,6 +121,10 @@ const SidebarChat = () => {
 		const data = await response.data;
 		// console.log(data);
 		setData(data);
+	};
+
+	const handleChange = (event) => {
+		setSelectedRole(event.target.value);
 	};
 
 	const handleClick = (event) => {
@@ -148,6 +182,7 @@ const SidebarChat = () => {
 			const body = JSON.stringify({
 				title,
 				description,
+				level: selectedRole,
 			});
 
 			const response = await axios.post(
@@ -451,6 +486,63 @@ const SidebarChat = () => {
 							error={errors?.description ? true : false}
 							helperText={errors?.description?.message}
 						/>
+						{reduxStoredUserId === '61e1059af5aab1f746e513b0' && (
+							<TextField
+								{...register('role', {
+									required: 'Role is required!',
+								})}
+								fullWidth
+								select
+								label="User role level"
+								value={selectedRole}
+								onChange={handleChange}
+								helperText="Please select user role level"
+							>
+								{roles.map((option) => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+						{reduxStoredUserId === '61e0fe34f5aab1f746e513a3' && (
+							<TextField
+								{...register('role', {
+									required: 'Role is required!',
+								})}
+								fullWidth
+								select
+								label="User role level"
+								value={selectedRole}
+								onChange={handleChange}
+								helperText="Please select user role level"
+							>
+								{roles.map((option) => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+						{reduxStoredUserId === '61e51931339d036aa2404867' && (
+							<TextField
+								{...register('role', {
+									required: 'Role is required!',
+								})}
+								fullWidth
+								select
+								label="User role level"
+								value={selectedRole}
+								onChange={handleChange}
+								helperText="Please select user role level"
+							>
+								{roles.map((option) => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={handleCloseDialog}>Cancel</Button>

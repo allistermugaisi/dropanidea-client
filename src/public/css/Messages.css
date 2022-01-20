@@ -197,6 +197,45 @@
 	background: #555;
 }
 
+.reply-info-right {
+	background: #f1f1f1;
+	padding: 0.5rem;
+	border-radius: 7px;
+}
+
+.reply-info-left {
+	background: #d3d3d3;
+	padding: 0.5rem;
+	border-radius: 7px;
+}
+
+.reply-container {
+	display: flex;
+	padding: 0.5rem 4rem;
+}
+
+.reply-container-none {
+	display: none;
+}
+
+.icon-inner {
+	display: flex;
+	align-items: center;
+	padding-right: 1rem;
+}
+
+.icon-inner-right {
+	display: flex;
+	align-items: center;
+	/* padding-right: 1rem; */
+}
+
+.reply-inner {
+	min-width: 90%;
+	border-left: 3px solid #1795f1;
+	padding: 0.5rem;
+}
+
 .chat-footer {
 	display: flex;
 	justify-content: center;

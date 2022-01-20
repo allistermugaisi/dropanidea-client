@@ -19,6 +19,8 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ReplyIcon from '@mui/icons-material/Reply';
+import CloseIcon from '@mui/icons-material/Close';
 import {
 	TextField,
 	Popover,
@@ -77,6 +79,8 @@ const Messages = () => {
 	const [messages, setMessages] = useState([]);
 	const [input, setInput] = useState('');
 	const [showEmojis, setShowEmojis] = useState(false);
+	const [replyActive, setReplyActive] = useState(false);
+	const [currentReplyMessage, setCurrentReplyMessage] = useState('');
 
 	const {
 		register,
@@ -125,6 +129,17 @@ const Messages = () => {
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
 
+	const replyMessage = (message, e) => {
+		e.preventDefault();
+		setCurrentReplyMessage(message);
+		setReplyActive(true);
+	};
+
+	const closeReply = () => {
+		setReplyActive(false);
+		setCurrentReplyMessage('');
+	};
+
 	const sendValue = async () => {
 		if (valueRef.current.value === '')
 			return toast.error('Please type a message');
@@ -136,6 +151,7 @@ const Messages = () => {
 				const body = JSON.stringify({
 					message,
 					ideaId,
+					replies: currentReplyMessage,
 					tags: '',
 					selectedFile: '',
 					photoURL: '',
@@ -150,6 +166,7 @@ const Messages = () => {
 				const data = await response.data;
 
 				setInput('');
+				closeReply();
 				if (data) {
 					fetchDiscussions();
 					toast.success(`${message}`);
@@ -250,13 +267,16 @@ const Messages = () => {
 					<div className="chat-box" ref={messageRef}>
 						{messages.length > 0 ? (
 							messages.map((item) => {
-								const { _id, message, creator, createdAt } = item;
+								const { _id, message, creator, replies, createdAt } = item;
 								return (
 									<div key={_id}>
 										{creator === reduxStoredUserId ? (
 											<div className="chat-r" key={_id}>
 												<div className="sp"></div>
 												<div className="mess mess-r">
+													{replies[0] && (
+														<div className="reply-info-right">{replies[0]}</div>
+													)}
 													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
@@ -264,13 +284,16 @@ const Messages = () => {
 															<>
 																<ArrowDropDownIcon />
 																<div className="dropdown-content-right">
-																	{/* <Typography
+																	<Typography
+																		onClick={(event) =>
+																			replyMessage(message, event)
+																		}
 																		sx={{
 																			cursor: 'pointer',
 																		}}
 																	>
 																		Reply
-																	</Typography> */}
+																	</Typography>
 																	<Typography
 																		onClick={(event) => onDelete(_id, event)}
 																		sx={{
@@ -288,19 +311,25 @@ const Messages = () => {
 										) : (
 											<div className="chat-l" key={_id}>
 												<div className="mess">
+													{replies[0] && (
+														<div className="reply-info-left">{replies[0]}</div>
+													)}
 													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
-														{/* <ArrowDropDownIcon />
+														<ArrowDropDownIcon />
 														<div className="dropdown-content">
 															<Typography
+																onClick={(event) =>
+																	replyMessage(message, event)
+																}
 																sx={{
 																	cursor: 'pointer',
 																}}
 															>
 																Reply
 															</Typography>
-														</div> */}
+														</div>
 													</div>
 												</div>
 												<div className="sp"></div>
@@ -342,6 +371,21 @@ const Messages = () => {
 					)}
 
 					<form noValidate autoComplete="off">
+						<div
+							className={
+								replyActive ? 'reply-container' : 'reply-container-none'
+							}
+						>
+							<div className="icon-inner">
+								<ReplyIcon />
+							</div>
+							<div className="reply-inner">{currentReplyMessage}</div>
+							<div className="icon-inner-right">
+								<IconButton onClick={closeReply}>
+									<CloseIcon />
+								</IconButton>
+							</div>
+						</div>
 						<div className="chat-footer">
 							<IconButton>
 								<KeyboardVoiceIcon />
@@ -445,30 +489,33 @@ const Messages = () => {
 					<div className="chat-box">
 						{messages.length > 0 ? (
 							messages.map((item) => {
-								const { _id, message, creator, createdAt } = item;
+								const { _id, message, creator, replies, createdAt } = item;
 								return (
 									<Fragment key={_id}>
 										{creator === reduxStoredUserId ? (
 											<div className="chat-r">
 												<div className="sp"></div>
 												<div className="mess mess-r">
-													<p>
-														{/* <img src="img/emoji-1.png" className="emoji" /> */}
-														{message}
-													</p>
+													{replies[0] && (
+														<div className="reply-info-right">{replies[0]}</div>
+													)}
+													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
 														{creator === reduxStoredUserId && (
 															<>
 																<ArrowDropDownIcon />
 																<div className="dropdown-content-right">
-																	{/* <Typography
+																	<Typography
+																		onClick={(event) =>
+																			replyMessage(message, event)
+																		}
 																		sx={{
 																			cursor: 'pointer',
 																		}}
 																	>
 																		Reply
-																	</Typography> */}
+																	</Typography>
 																	<Typography
 																		onClick={(event) => onDelete(_id, event)}
 																		sx={{
@@ -486,19 +533,25 @@ const Messages = () => {
 										) : (
 											<div className="chat-l">
 												<div className="mess">
+													{replies[0] && (
+														<div className="reply-info-left">{replies[0]}</div>
+													)}
 													<p>{message}</p>
 													<div className="check">
 														<span>{moment(createdAt).fromNow()}</span>
-														{/* <ArrowDropDownIcon />
+														<ArrowDropDownIcon />
 														<div className="dropdown-content">
 															<Typography
+																onClick={(event) =>
+																	replyMessage(message, event)
+																}
 																sx={{
 																	cursor: 'pointer',
 																}}
 															>
 																Reply
 															</Typography>
-														</div> */}
+														</div>
 													</div>
 												</div>
 												<div className="sp"></div>
@@ -527,6 +580,21 @@ const Messages = () => {
 					)}
 
 					<form noValidate autoComplete="off">
+						<div
+							className={
+								replyActive ? 'reply-container' : 'reply-container-none'
+							}
+						>
+							<div className="icon-inner">
+								<ReplyIcon />
+							</div>
+							<div className="reply-inner">{currentReplyMessage}</div>
+							<div className="icon-inner-right">
+								<IconButton onClick={closeReply}>
+									<CloseIcon />
+								</IconButton>
+							</div>
+						</div>
 						<div className="chat-footer">
 							<IconButton>
 								<KeyboardVoiceIcon />

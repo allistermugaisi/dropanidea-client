@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import {
 	Table,
+	MenuItem,
 	TableBody,
 	TableCell,
 	TableContainer,
@@ -21,6 +22,33 @@ import {
 } from '@mui/material';
 
 import '../../public/css/Home.css';
+
+const roles = [
+	{
+		value: 'Global',
+		label: 'Global (All levels)',
+	},
+	{
+		value: 'Normal staff',
+		label: 'Normal staff',
+	},
+	{
+		value: 'Business owner',
+		label: 'Business owner',
+	},
+	{
+		value: 'Top Level Manager',
+		label: 'Top Level Manager',
+	},
+	{
+		value: 'Middle Level Manager',
+		label: 'Middle Level Manager',
+	},
+	{
+		value: 'Low Level Manager',
+		label: 'Low Level Manager',
+	},
+];
 
 const ZinniaGlobalConsultancy = 'https://zinniaglobalconsultancy.com';
 
@@ -47,10 +75,12 @@ const tokenConfig = () => {
 const Home = () => {
 	const token = tokenConfig();
 	let auth = useSelector((state) => state.auth);
+	let reduxStoredUserId = auth?.user?.current_user?._id;
 	const dispatch = useDispatch();
 
 	const [ideas, setIdeas] = useState([]);
 	const [openPopup, setOpenPopup] = useState(false);
+	const [selectedRole, setSelectedRole] = useState('Normal staff');
 
 	const {
 		register,
@@ -83,6 +113,10 @@ const Home = () => {
 		}
 	};
 
+	const handleChange = (event) => {
+		setSelectedRole(event.target.value);
+	};
+
 	const handleClickOpen = () => {
 		setOpenPopup(true);
 	};
@@ -106,6 +140,7 @@ const Home = () => {
 			const body = JSON.stringify({
 				title,
 				description,
+				level: selectedRole,
 			});
 
 			const response = await axios.post(
@@ -314,6 +349,63 @@ const Home = () => {
 							error={errors?.description ? true : false}
 							helperText={errors?.description?.message}
 						/>
+						{reduxStoredUserId === '61e1059af5aab1f746e513b0' && (
+							<TextField
+								{...register('role', {
+									required: 'Role is required!',
+								})}
+								fullWidth
+								select
+								label="User role level"
+								value={selectedRole}
+								onChange={handleChange}
+								helperText="Please select user role level"
+							>
+								{roles.map((option) => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+						{reduxStoredUserId === '61e0fe34f5aab1f746e513a3' && (
+							<TextField
+								{...register('role', {
+									required: 'Role is required!',
+								})}
+								fullWidth
+								select
+								label="User role level"
+								value={selectedRole}
+								onChange={handleChange}
+								helperText="Please select user role level"
+							>
+								{roles.map((option) => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+						{reduxStoredUserId === '61e51931339d036aa2404867' && (
+							<TextField
+								{...register('role', {
+									required: 'Role is required!',
+								})}
+								fullWidth
+								select
+								label="User role level"
+								value={selectedRole}
+								onChange={handleChange}
+								helperText="Please select user role level"
+							>
+								{roles.map((option) => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={handleCloseDialog}>Cancel</Button>
