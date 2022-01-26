@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import io from 'socket.io-client';
-import { Sidebar, Navbar, Routes, Home } from './index';
+import { Sidebar, Navbar, Routes, Users } from './index';
 import '../../public/css/Landing.css';
 
 // const socket = io('https://zinniaglobalconsultancy.com');

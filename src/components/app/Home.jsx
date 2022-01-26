@@ -188,6 +188,50 @@ const Home = () => {
 					</div>
 				</div>
 			</div>
+			{auth?.user?.current_user?.isAdmin && (
+				<div className="card-content">
+					<div className="card-detail">
+						<h5 className="card-title">Total Ideas (All)</h5>
+						<div className="card-inner">
+							<Link
+								style={{ textDecoration: 'none', textAlign: 'center' }}
+								to="/dashboard/ideas_all"
+							>
+								<Button>View</Button>
+							</Link>
+						</div>
+					</div>
+					<div className="card-detail">
+						<h5 className="card-title">Total Discussions (All)</h5>
+						<div className="card-inner">
+							<Link
+								style={{ textDecoration: 'none', textAlign: 'center' }}
+								to="/dashboard/contributions"
+							>
+								<Button>View</Button>
+							</Link>
+						</div>
+					</div>
+					<div className="card-detail">
+						<h5 className="card-title">Active Users</h5>
+						<div className="card-inner">
+							<Link
+								style={{ textDecoration: 'none', textAlign: 'center' }}
+								to="/dashboard/users"
+							>
+								<Button>View</Button>
+							</Link>
+						</div>
+					</div>
+					<div className="card-detail">
+						<h5 className="card-title">Most Discussed Ideas</h5>
+						<div className="card-inner">
+							<span>0</span>
+						</div>
+					</div>
+				</div>
+			)}
+
 			<div className="conclusive-content">
 				<TableContainer component={Paper}>
 					<h3 style={{ paddingLeft: '1rem', paddingTop: '1rem' }}>
@@ -216,14 +260,15 @@ const Home = () => {
 											<TableCell>{title}</TableCell>
 											<TableCell align="left">{description}</TableCell>
 											<TableCell align="left">
-												<Button>
-													<Link
-														style={{ textDecoration: 'none' }}
-														to={`/ideas/${_id}`}
-													>
-														Discuss
-													</Link>
-												</Button>
+												<Link
+													style={{
+														textDecoration: 'none',
+														textAlign: 'center',
+													}}
+													to={`/ideas/${_id}`}
+												>
+													<Button>Discuss</Button>
+												</Link>
 											</TableCell>
 										</TableRow>
 									);
@@ -241,7 +286,11 @@ const Home = () => {
 						</TableBody>
 					</Table>
 				</TableContainer>
-				<TableContainer style={{ marginTop: '1rem' }} component={Paper}>
+				<TableContainer
+					sx={{ whiteSpace: 'nowrap' }}
+					style={{ marginTop: '1rem' }}
+					component={Paper}
+				>
 					<h3 style={{ paddingLeft: '1rem', paddingTop: '1rem' }}>My Ideas</h3>
 					<Table aria-label="simple table">
 						<TableHead>
@@ -278,7 +327,7 @@ const Home = () => {
 					</Table>
 				</TableContainer>
 			</div>
-			<TableContainer component={Paper}>
+			<TableContainer sx={{ whiteSpace: 'nowrap' }} component={Paper}>
 				<Table>
 					<TableHead>
 						<TableRow>

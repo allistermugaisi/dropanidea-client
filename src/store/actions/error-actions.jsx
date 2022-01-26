@@ -4,6 +4,7 @@ import {
 	LOGIN_FAIL,
 	REGISTER_FAIL,
 	AUTH_ERROR,
+	IDEA_ERROR,
 } from '../../constants/types';
 
 // RETURN ERRORS from server
@@ -45,5 +46,11 @@ export const registerFail = () => {
 export const authError = () => {
 	return {
 		type: AUTH_ERROR,
+	};
+};
+
+export const ideaError = () => {
+	return {
+		type: IDEA_ERROR,
 	};
 };

@@ -4,4 +4,6 @@ export { default as Navbar } from './Navbar';
 export { default as Home } from './Home';
 export { default as Users } from './Users';
 export { default as Reports } from './Reports';
+export { default as Ideas } from './Ideas';
+export { default as Discussions } from './Discussions';
 export { default as Routes } from './Routes';

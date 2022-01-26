@@ -34,7 +34,6 @@ export default function AuthReducer(state = initialState, action) {
 			return {
 				...state,
 				isAuthenticated: true,
-				isAdmin: false,
 				isLoading: false,
 				user: action.payload,
 			};
@@ -44,7 +43,6 @@ export default function AuthReducer(state = initialState, action) {
 				...state,
 				...action.payload,
 				isAuthenticated: true,
-				isAdmin: false,
 				isLoading: false,
 			};
 		case RESET_PASSWORD_SUCCESS:
@@ -53,7 +51,6 @@ export default function AuthReducer(state = initialState, action) {
 				...action.payload,
 				isResetPassword: true,
 				isAuthenticated: false,
-				isAdmin: false,
 				isLoading: false,
 			};
 		case AUTH_ERROR:
@@ -65,7 +62,6 @@ export default function AuthReducer(state = initialState, action) {
 				...state,
 				user: null,
 				isAuthenticated: false,
-				isAdmin: false,
 				isLoading: false,
 			};
 		default:

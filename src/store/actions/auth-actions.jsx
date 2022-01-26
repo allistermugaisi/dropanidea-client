@@ -40,7 +40,6 @@ export const tokenConfig = () => {
 };
 
 // Check token and Auth user
-
 export const auth = () => async (dispatch) => {
 	const token = tokenConfig();
 	try {
@@ -67,7 +66,6 @@ export const auth = () => async (dispatch) => {
 };
 
 // Register User
-
 export const registerUser = (payload) => async (dispatch) => {
 	const {
 		username,
@@ -111,12 +109,12 @@ export const registerUser = (payload) => async (dispatch) => {
 			toast.success('You are now registered successfully!');
 			toast.success('Kindly await your Psychometric Test!');
 		}
+		dispatch(clearErrors());
 	} catch (error) {
 		dispatch(
 			returnErrors(error.response.data, error.response.status, 'REGISTER_FAIL')
 		);
 		dispatch(registerFail());
-		dispatch(clearErrors());
 		localStorage.removeItem('userToken');
 	}
 };
@@ -154,7 +152,6 @@ export const loginUser = (payload) => async (dispatch) => {
 			returnErrors(error.response.data, error.response.status, 'LOGIN_FAIL')
 		);
 		dispatch(loginFail());
-		dispatch(clearErrors());
 		localStorage.removeItem('userToken');
 	}
 };
@@ -163,6 +160,7 @@ export const loginUser = (payload) => async (dispatch) => {
 export const logOut = () => (dispatch) => {
 	localStorage.removeItem('userToken');
 	toast.success('Successfully logged out!');
+	dispatch(clearErrors());
 	dispatch({
 		type: LOGOUT_SUCCESS,
 	});
@@ -205,7 +203,6 @@ export const forgotPassword = (payload) => async (dispatch) => {
 		dispatch(
 			returnErrors(error.response.data, error.response.status, 'RESET_FAIL')
 		);
-		dispatch(clearErrors());
 		localStorage.removeItem('userToken');
 	}
 };

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
+import PrivateRoute from '../../middleware/PrivateRoute';
 import {
 	// Sidebar components
 	Home,
 	Users,
 	Reports,
+	Ideas,
+	Discussions,
 } from './index';
 
 const routes = [
@@ -15,14 +18,24 @@ const routes = [
 		content: () => <Home />,
 	},
 	{
-		path: `/users`,
+		path: `users`,
 		exact: false,
 		content: () => <Users />,
 	},
 	{
-		path: `/reports`,
+		path: `reports`,
 		exact: false,
 		content: () => <Reports />,
+	},
+	{
+		path: `ideas_all`,
+		exact: false,
+		content: () => <Ideas />,
+	},
+	{
+		path: `contributions`,
+		exact: false,
+		content: () => <Discussions />,
 	},
 ];
 
@@ -32,9 +45,9 @@ const Routes = () => {
 			{routes.map((route, index) => {
 				const { path, exact, content } = route;
 				return (
-					<Route
+					<PrivateRoute
 						key={index}
-						path={`${path}`}
+						path={`/dashboard/${path}`}
 						exact={exact}
 						component={content}
 					/>

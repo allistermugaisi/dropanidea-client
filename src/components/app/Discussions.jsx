@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Users = () => {
+const Discussions = () => {
 	return (
 		<div
 			style={{
@@ -10,9 +10,9 @@ const Users = () => {
 				alignItems: 'center',
 			}}
 		>
-			<h2>Users</h2>
+			<h2>All Discussions</h2>
 		</div>
 	);
 };
 
-export default Users;
+export default Discussions;
