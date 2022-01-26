@@ -6,6 +6,7 @@ import {
 	REGISTER_FAIL,
 	AUTH_ERROR,
 	IDEA_ERROR,
+	DISCUSSION_ERROR,
 } from '../../constants/types';
 
 // RETURN ERRORS from server
@@ -57,8 +58,16 @@ export const usersError = () => {
 	};
 };
 
+// Idea Error
 export const ideaError = () => {
 	return {
 		type: IDEA_ERROR,
+	};
+};
+
+// Discussion Error
+export const discussionError = () => {
+	return {
+		type: DISCUSSION_ERROR,
 	};
 };

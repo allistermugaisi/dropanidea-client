@@ -19,3 +19,7 @@ export const GET_ALL_IDEAS = 'get_all_ideas';
 export const UPDATE_IDEA = 'update_idea';
 export const DELETE_IDEA = 'delete_idea';
 export const IDEA_ERROR = 'idea_error';
+export const DISCUSSION_LOADING = 'discussion_loading';
+export const GET_DISCUSSION = 'get_discussion';
+export const GET_DISCUSSIONS = 'get_discussions';
+export const DISCUSSION_ERROR = 'discussion_error';

@@ -66,7 +66,7 @@ const PsychometricTest = () => {
 		shouldFocusError: true,
 	});
 
-	let isTestLength = auth?.user?.current_user?.psychometricTest.length;
+	let isTestLength = auth?.user?.current_user?.psychometricTest?.length;
 
 	useEffect(() => {
 		if (isTestLength >= 5) {

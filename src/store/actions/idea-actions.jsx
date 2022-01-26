@@ -15,7 +15,6 @@ import {
 	ideaError,
 } from './error-actions';
 
-const USERS_AUTH = 'https://zinniaglobalconsultancy.com/api/v1/auth';
 const IDEA_URL = 'https://zinniaglobalconsultancy.com/api/v1/ideas';
 
 // Setup config headers and token
@@ -38,33 +37,6 @@ export const tokenConfig = () => {
 	}
 
 	return config;
-};
-
-// Check token and Auth user
-export const auth = () => async (dispatch) => {
-	const token = tokenConfig();
-	try {
-		const response = await axios.get(`${USERS_AUTH}/profile`, token);
-		const data = await response.data;
-		// console.log(data);
-
-		await dispatch({
-			type: AUTH_USER,
-			payload: data,
-		});
-		dispatch(clearErrors());
-	} catch (error) {
-		// console.log(error.response.data);
-		dispatch(
-			returnErrors(
-				error.response.data,
-				error.response.status,
-				'AUTHENTICATION_FAIL'
-			)
-		);
-		dispatch(authError());
-		localStorage.removeItem('userToken');
-	}
 };
 
 // Get all ideas
