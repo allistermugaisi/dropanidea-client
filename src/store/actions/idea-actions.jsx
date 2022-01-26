@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import {
 	IDEA_LOADING,
 	GET_IDEA,
+	DELETE_IDEA,
 	GET_IDEAS,
 	GET_ALL_IDEAS,
 	IDEA_ERROR,
@@ -66,6 +67,7 @@ export const auth = () => async (dispatch) => {
 	}
 };
 
+// Get all ideas
 export const getAllIdeas = () => async (dispatch) => {
 	const token = tokenConfig();
 
@@ -105,6 +107,34 @@ export const getIdeas = () => async (dispatch) => {
 		// console.log(error.response.data);
 		dispatch(
 			returnErrors(error.response.data, error.response.status, 'GET_IDEA_FAIL')
+		);
+		dispatch(ideaError());
+	}
+};
+
+// Delete idea
+export const deleteIdea = (payloadId) => async (dispatch) => {
+	const token = tokenConfig();
+
+	try {
+		const response = await axios.delete(`${IDEA_URL}/${payloadId}`, token);
+
+		const data = await response.data;
+		if (data) {
+			toast.error('Idea deleted successfully');
+			await dispatch({
+				type: DELETE_IDEA,
+				payload: payloadId,
+			});
+			dispatch(getAllIdeas());
+		}
+	} catch (error) {
+		dispatch(
+			returnErrors(
+				error.response.data,
+				error.response.status,
+				'DELETE_IDEA_FAIL'
+			)
 		);
 		dispatch(ideaError());
 	}

@@ -1,6 +1,7 @@
 import {
 	IDEA_LOADING,
 	GET_IDEA,
+	DELETE_IDEA,
 	GET_IDEAS,
 	GET_ALL_IDEAS,
 } from '../../constants/types';
@@ -39,6 +40,13 @@ export default function IdeaReducer(state = initialState, action) {
 				isAuthenticated: true,
 				isLoading: false,
 				ideasAll: action.payload,
+			};
+		case DELETE_IDEA:
+			return {
+				...state,
+				isAuthenticated: true,
+				isLoading: false,
+				ideasAll: state.ideasAll?.filter((idea) => idea._id !== action.payload),
 			};
 		default:
 			return state;

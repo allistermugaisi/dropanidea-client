@@ -14,4 +14,5 @@ export const IDEA_LOADING = 'idea_loading';
 export const GET_IDEA = 'get_idea';
 export const GET_IDEAS = 'get_ideas';
 export const GET_ALL_IDEAS = 'get_all_ideas';
+export const DELETE_IDEA = 'delete_idea';
 export const IDEA_ERROR = 'idea_error';

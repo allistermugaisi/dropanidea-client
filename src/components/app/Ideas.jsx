@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
 import {
 	TableContainer,
@@ -8,27 +9,52 @@ import {
 	TableRow,
 	TableCell,
 	TableBody,
+	Tooltip,
 	Typography,
 	Collapse,
 	CircularProgress,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	Paper,
+	Popover,
 	Box,
 	Button,
 	IconButton,
 } from '@mui/material';
-import { getAllIdeas } from '../../store/actions/idea-actions';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { getAllIdeas, deleteIdea } from '../../store/actions/idea-actions';
+import MoreVert from '@mui/icons-material/MoreVert';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Search from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const Ideas = () => {
+	const history = useHistory();
 	const dispatch = useDispatch();
 	let getIdeas = useSelector((state) => state.idea);
 
 	const [selectedIndex, setSelectedIndex] = useState('');
+	const [openPopupInfo, setOpenPopupInfo] = useState(false);
+
+	const [currentData, setCurrentData] = useState([]);
 
 	useEffect(() => {
 		dispatch(getAllIdeas());
 	}, []);
+
+	const handleClickOpenInfo = (data, e) => {
+		e.preventDefault();
+		setOpenPopupInfo(true);
+		setCurrentData(data);
+	};
+
+	const handleCloseInfoDialog = () => {
+		setOpenPopupInfo(false);
+	};
 
 	const handleClick = (index) => {
 		if (selectedIndex === index) {
@@ -38,17 +64,25 @@ const Ideas = () => {
 		}
 	};
 
+	const onDelete = async (_id, e) => {
+		e.preventDefault();
+		dispatch(deleteIdea(_id));
+	};
+
 	return (
 		<div
 			style={{
-				paddingTop: '6rem',
+				paddingTop: '5rem',
 				paddingLeft: '1rem',
 				paddingRight: '1rem',
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
 			}}
 		>
+			<IconButton
+				style={{ marginBottom: '.8rem' }}
+				onClick={() => history.goBack()}
+			>
+				<ArrowBackIcon />
+			</IconButton>
 			<TableContainer component={Paper}>
 				<Table aria-label="collapsible table">
 					<TableHead>
@@ -57,8 +91,8 @@ const Ideas = () => {
 							<TableCell>Total Ideas (All)</TableCell>
 							<TableCell>Creator</TableCell>
 							<TableCell>Level</TableCell>
-							<TableCell>Date Created</TableCell>
 							<TableCell>Last Update</TableCell>
+							<TableCell>Action</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -99,15 +133,76 @@ const Ideas = () => {
 										</TableCell>
 										<TableCell>
 											{format(
-												new Date(createdAt),
+												new Date(updatedAt),
 												"do MMM yyyy, h:mm:ss aaaaa'm'"
 											)}
 										</TableCell>
 										<TableCell>
-											{format(
-												new Date(updatedAt),
-												"do MMM yyyy, h:mm:ss aaaaa'm'"
-											)}
+											<PopupState
+												variant="popover"
+												popupId="demo-popup-popover"
+											>
+												{(popupState) => (
+													<>
+														<IconButton {...bindTrigger(popupState)}>
+															<Tooltip
+																title="More actions"
+																placement="right"
+																arrow
+															>
+																<MoreVert />
+															</Tooltip>
+														</IconButton>
+														<Popover
+															{...bindPopover(popupState)}
+															anchorOrigin={{
+																vertical: 'top',
+																horizontal: 'right',
+															}}
+															transformOrigin={{
+																vertical: 'top',
+																horizontal: 'right',
+															}}
+															elevation={1}
+														>
+															<Typography
+																sx={{
+																	display: 'flex',
+																	flexDirection: 'column',
+																	padding: 2,
+																}}
+															>
+																<Link
+																	to="#"
+																	style={{ textDecoration: 'none' }}
+																	onClick={(event) =>
+																		handleClickOpenInfo(idea, event)
+																	}
+																	sx={{ padding: 1 }}
+																>
+																	View
+																</Link>
+																<Link
+																	to="#"
+																	// onClick={(e) => handleEditPopup(client, e)}
+																	style={{ textDecoration: 'none' }}
+																	sx={{ padding: 1 }}
+																>
+																	Edit
+																</Link>
+																<Link
+																	to="#"
+																	onClick={(e) => onDelete(_id, e)}
+																	style={{ textDecoration: 'none' }}
+																	sx={{ padding: 1 }}
+																>
+																	Delete
+																</Link>
+															</Typography>
+														</Popover>
+													</>
+												)}
+											</PopupState>
 										</TableCell>
 									</TableRow>
 									<TableRow key={index}>
@@ -180,6 +275,17 @@ const Ideas = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			<Dialog open={openPopupInfo} onClose={handleCloseInfoDialog}>
+				<DialogTitle>{currentData.title}</DialogTitle>
+				<DialogContent>
+					<DialogContentText style={{ marginBottom: '.8rem' }}>
+						{currentData.description}
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleCloseInfoDialog}>Close</Button>
+				</DialogActions>
+			</Dialog>
 		</div>
 	);
 };
