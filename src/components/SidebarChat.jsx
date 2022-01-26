@@ -480,51 +480,15 @@ const SidebarChat = () => {
 							style={{ marginBottom: '.8rem' }}
 							name="description"
 							fullWidth
+							multiline
+							rows={4}
 							autoComplete="off"
 							label="Your description"
 							placeholder="Type your description"
 							error={errors?.description ? true : false}
 							helperText={errors?.description?.message}
 						/>
-						{reduxStoredUserId === '61e1059af5aab1f746e513b0' && (
-							<TextField
-								{...register('role', {
-									required: 'Role is required!',
-								})}
-								fullWidth
-								select
-								label="User role level"
-								value={selectedRole}
-								onChange={handleChange}
-								helperText="Please select user role level"
-							>
-								{roles.map((option) => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						)}
-						{reduxStoredUserId === '61e0fe34f5aab1f746e513a3' && (
-							<TextField
-								{...register('role', {
-									required: 'Role is required!',
-								})}
-								fullWidth
-								select
-								label="User role level"
-								value={selectedRole}
-								onChange={handleChange}
-								helperText="Please select user role level"
-							>
-								{roles.map((option) => (
-									<MenuItem key={option.value} value={option.value}>
-										{option.label}
-									</MenuItem>
-								))}
-							</TextField>
-						)}
-						{reduxStoredUserId === '61e51931339d036aa2404867' && (
+						{auth?.user?.current_user?.isAdmin && (
 							<TextField
 								{...register('role', {
 									required: 'Role is required!',

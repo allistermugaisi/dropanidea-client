@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useForm } from 'react-hook-form';
 import {
 	TableContainer,
 	Table,
@@ -13,6 +14,7 @@ import {
 	Typography,
 	Collapse,
 	CircularProgress,
+	MenuItem,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -20,36 +22,103 @@ import {
 	DialogTitle,
 	Paper,
 	Popover,
+	TextField,
 	Box,
 	Button,
 	IconButton,
 } from '@mui/material';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
-import { getAllIdeas, deleteIdea } from '../../store/actions/idea-actions';
+import {
+	getAllIdeas,
+	updateIdea,
+	deleteIdea,
+} from '../../store/actions/idea-actions';
 import MoreVert from '@mui/icons-material/MoreVert';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Search from '@mui/icons-material/Search';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+const roles = [
+	{
+		value: 'Global',
+		label: 'Global (All levels)',
+	},
+	{
+		value: 'Normal staff',
+		label: 'Normal staff',
+	},
+	{
+		value: 'Business owner',
+		label: 'Business owner',
+	},
+	{
+		value: 'Top Level Manager',
+		label: 'Top Level Manager',
+	},
+	{
+		value: 'Middle Level Manager',
+		label: 'Middle Level Manager',
+	},
+	{
+		value: 'Low Level Manager',
+		label: 'Low Level Manager',
+	},
+];
+
 const Ideas = () => {
 	const history = useHistory();
 	const dispatch = useDispatch();
+	let auth = useSelector((state) => state.auth);
 	let getIdeas = useSelector((state) => state.idea);
 
 	const [selectedIndex, setSelectedIndex] = useState('');
+	const [openPopup, setOpenPopup] = useState(false);
 	const [openPopupInfo, setOpenPopupInfo] = useState(false);
 
 	const [currentData, setCurrentData] = useState([]);
+	const [selectedRole, setSelectedRole] = useState('Normal staff');
+
+	const {
+		register,
+		reset,
+		getValues,
+		handleSubmit,
+		formState: { errors },
+	} = useForm({
+		mode: 'all',
+		shouldUnregister: true,
+		shouldFocusError: true,
+	});
 
 	useEffect(() => {
 		dispatch(getAllIdeas());
 	}, []);
 
+	const handleChange = (event) => {
+		setSelectedRole(event.target.value);
+	};
+
+	const handleClickOpen = (data, e) => {
+		e.preventDefault();
+		const { title, description, role } = data;
+		reset({
+			title,
+			description,
+			role,
+		});
+		setCurrentData(data);
+		setOpenPopup(true);
+	};
+
 	const handleClickOpenInfo = (data, e) => {
 		e.preventDefault();
-		setOpenPopupInfo(true);
 		setCurrentData(data);
+		setOpenPopupInfo(true);
+	};
+
+	const handleCloseDialog = () => {
+		setOpenPopup(false);
 	};
 
 	const handleCloseInfoDialog = () => {
@@ -64,9 +133,26 @@ const Ideas = () => {
 		}
 	};
 
+	// Update an idea
+	const onSubmit = async (data, e) => {
+		e.preventDefault();
+
+		const { title, description } = data;
+
+		const body = {
+			_id: currentData._id,
+			title,
+			description,
+			level: selectedRole,
+		};
+		dispatch(updateIdea(body));
+		handleCloseDialog();
+	};
+
 	const onDelete = async (_id, e) => {
 		e.preventDefault();
 		dispatch(deleteIdea(_id));
+		handleCloseDialog();
 	};
 
 	return (
@@ -184,7 +270,9 @@ const Ideas = () => {
 																</Link>
 																<Link
 																	to="#"
-																	// onClick={(e) => handleEditPopup(client, e)}
+																	onClick={(event) =>
+																		handleClickOpen(idea, event)
+																	}
 																	style={{ textDecoration: 'none' }}
 																	sx={{ padding: 1 }}
 																>
@@ -275,6 +363,71 @@ const Ideas = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			<Dialog open={openPopup} onClose={handleCloseDialog}>
+				<DialogTitle>Edit an Idea</DialogTitle>
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<DialogContent>
+						<DialogContentText style={{ marginBottom: '.8rem' }}>
+							Do you have an idea that you want it to be discussed? Please
+							proceed and create your idea in the form below.
+						</DialogContentText>
+
+						<TextField
+							autoFocus
+							{...register('title', {
+								required: 'Title is required!',
+								shouldFocus: true,
+							})}
+							style={{ marginBottom: '.8rem' }}
+							name="title"
+							fullWidth
+							autoComplete="off"
+							label="Title"
+							placeholder="Market Strategy"
+							error={errors?.title ? true : false}
+							helperText={errors?.title?.message}
+						/>
+						<TextField
+							{...register('description', {
+								required: 'Description is required!',
+								shouldFocus: true,
+							})}
+							style={{ marginBottom: '.8rem' }}
+							name="description"
+							fullWidth
+							multiline
+							autoComplete="off"
+							label="Your description"
+							placeholder="Type your description"
+							error={errors?.description ? true : false}
+							helperText={errors?.description?.message}
+						/>
+						{auth?.user?.current_user?.isAdmin && (
+							<TextField
+								{...register('role', {
+									required: 'Role is required!',
+								})}
+								fullWidth
+								select
+								label="User role level"
+								value={selectedRole}
+								onChange={handleChange}
+								helperText="Please select user role level"
+							>
+								{roles.map((option) => (
+									<MenuItem key={option.value} value={option.value}>
+										{option.label}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleCloseDialog}>Cancel</Button>
+						<Button type="submit">Update</Button>
+					</DialogActions>
+				</form>
+			</Dialog>
 			<Dialog open={openPopupInfo} onClose={handleCloseInfoDialog}>
 				<DialogTitle>{currentData.title}</DialogTitle>
 				<DialogContent>

@@ -6,7 +6,7 @@ import {
 	DELETE_IDEA,
 	GET_IDEAS,
 	GET_ALL_IDEAS,
-	IDEA_ERROR,
+	UPDATE_IDEA,
 } from '../../constants/types';
 import {
 	returnErrors,
@@ -112,6 +112,37 @@ export const getIdeas = () => async (dispatch) => {
 	}
 };
 
+// Update idea
+export const updateIdea = (payload) => async (dispatch) => {
+	const token = tokenConfig();
+	const { _id, title, description, level } = payload;
+	try {
+		// Request body
+		const body = JSON.stringify({ title, description, level });
+
+		const response = await axios.put(`${IDEA_URL}/${_id}`, body, token);
+
+		const data = await response.data;
+		if (data) {
+			toast.success('Idea updated successfully');
+			await dispatch({
+				type: UPDATE_IDEA,
+				payload: data,
+			});
+			dispatch(getAllIdeas());
+		}
+	} catch (error) {
+		dispatch(
+			returnErrors(
+				error.response.data,
+				error.response.status,
+				'UPDATE_IDEA_FAIL'
+			)
+		);
+		dispatch(ideaError());
+	}
+};
+
 // Delete idea
 export const deleteIdea = (payloadId) => async (dispatch) => {
 	const token = tokenConfig();
@@ -121,7 +152,7 @@ export const deleteIdea = (payloadId) => async (dispatch) => {
 
 		const data = await response.data;
 		if (data) {
-			toast.error('Idea deleted successfully');
+			toast.success('Idea deleted successfully');
 			await dispatch({
 				type: DELETE_IDEA,
 				payload: payloadId,

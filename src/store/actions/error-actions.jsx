@@ -2,6 +2,7 @@ import {
 	GET_ERRORS,
 	CLEAR_ERRORS,
 	LOGIN_FAIL,
+	USERS_ERROR,
 	REGISTER_FAIL,
 	AUTH_ERROR,
 	IDEA_ERROR,
@@ -46,6 +47,13 @@ export const registerFail = () => {
 export const authError = () => {
 	return {
 		type: AUTH_ERROR,
+	};
+};
+
+// Users Error
+export const usersError = () => {
+	return {
+		type: USERS_ERROR,
 	};
 };
 
