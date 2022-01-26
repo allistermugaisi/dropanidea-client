@@ -173,7 +173,7 @@ const Ideas = () => {
 				<Table aria-label="collapsible table">
 					<TableHead>
 						<TableRow>
-							<TableCell />
+							{/* <TableCell /> */}
 							<TableCell>Total Ideas (All)</TableCell>
 							<TableCell>Creator</TableCell>
 							<TableCell>Level</TableCell>
@@ -196,7 +196,7 @@ const Ideas = () => {
 								return (
 									<Fragment key={_id}>
 										<TableRow key={_id}>
-											<TableCell>
+											{/* <TableCell>
 												<IconButton
 													aria-label="expand row"
 													size="small"
@@ -208,7 +208,7 @@ const Ideas = () => {
 														<KeyboardArrowDownIcon />
 													)}
 												</IconButton>
-											</TableCell>
+											</TableCell> */}
 											<TableCell component="th" scope="row">
 												{title}
 											</TableCell>
@@ -260,6 +260,13 @@ const Ideas = () => {
 																	}}
 																>
 																	<Link
+																		to={`/ideas/${_id}`}
+																		style={{ textDecoration: 'none' }}
+																		sx={{ padding: 1 }}
+																	>
+																		Discuss
+																	</Link>
+																	<Link
 																		to="#"
 																		style={{ textDecoration: 'none' }}
 																		onClick={(event) =>
@@ -294,7 +301,7 @@ const Ideas = () => {
 												</PopupState>
 											</TableCell>
 										</TableRow>
-										<TableRow key={index}>
+										{/* <TableRow key={index}>
 											<TableCell
 												style={{ paddingBottom: 0, paddingTop: 0 }}
 												colSpan={6}
@@ -321,13 +328,13 @@ const Ideas = () => {
 																Contributions
 															</Typography>
 
-															{/* <Button
+															<Button
 															size="small"
 															variant="contained"
 															color="primary"
 														>
 															Add Material Entry
-														</Button> */}
+														</Button>
 														</div>
 														<Table size="medium" aria-label="purchases">
 															<TableHead>
@@ -357,7 +364,7 @@ const Ideas = () => {
 													</Box>
 												</Collapse>
 											</TableCell>
-										</TableRow>
+										</TableRow> */}
 									</Fragment>
 								);
 							})
