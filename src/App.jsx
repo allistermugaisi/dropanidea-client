@@ -10,6 +10,7 @@ import {
 	Content,
 	ContentLanding,
 	ChatLanding,
+	AdminChatContent,
 	PsychometricTest,
 	ForgotPassword,
 	Messages,
@@ -33,6 +34,10 @@ const App = () => {
 				<PrivateRoute exact path="/dashboard/:id" component={Landing} />
 				<PrivateRoute path="/psychometric_test" component={PsychometricTest} />
 				<PrivateRoute path="/ideas" component={ChatSection} />
+				<PrivateRoute
+					path="/admin/ideas/:ideaId"
+					component={AdminChatContent}
+				/>
 				<Route path="/login" component={Login} />
 				<Route path="/register" component={Register} />
 				<Route path="/forgot-password" component={ForgotPassword} />

@@ -165,7 +165,7 @@ const Ideas = () => {
 		>
 			<IconButton
 				style={{ marginBottom: '.8rem' }}
-				onClick={() => history.goBack()}
+				onClick={() => history.push('/dashboard')}
 			>
 				<ArrowBackIcon />
 			</IconButton>
@@ -260,7 +260,7 @@ const Ideas = () => {
 																	}}
 																>
 																	<Link
-																		to={`/ideas/${_id}`}
+																		to={`/admin/ideas/${_id}`}
 																		style={{ textDecoration: 'none' }}
 																		sx={{ padding: 1 }}
 																	>

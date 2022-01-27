@@ -275,6 +275,12 @@ const SidebarChat = () => {
 						data.map((data) => {
 							const { _id, title, description, createdAt, conceptualist } =
 								data;
+
+							let halfAnHourAgo = moment()
+								.subtract(30, 'minutes')
+								.toDate()
+								.getTime();
+
 							return (
 								<Link key={_id} to={`/ideas/${_id}`} className="message">
 									<div className="picture-section">
@@ -302,16 +308,18 @@ const SidebarChat = () => {
 											>
 												Info
 											</Typography>
-											{reduxStoredUserId === conceptualist._id && (
-												<Typography
-													onClick={(event) => onDelete(event, data)}
-													sx={{
-														cursor: 'pointer',
-													}}
-												>
-													Delete
-												</Typography>
-											)}
+											{reduxStoredUserId === conceptualist._id &&
+												moment(createdAt).toDate().getTime() >
+													halfAnHourAgo && (
+													<Typography
+														onClick={(event) => onDelete(event, data)}
+														sx={{
+															cursor: 'pointer',
+														}}
+													>
+														Delete
+													</Typography>
+												)}
 										</div>
 									</div>
 								</Link>
@@ -384,6 +392,11 @@ const SidebarChat = () => {
 						data.map((data) => {
 							const { _id, title, description, createdAt, conceptualist } =
 								data;
+							let halfAnHourAgo = moment()
+								.subtract(30, 'minutes')
+								.toDate()
+								.getTime();
+
 							return (
 								<div key={_id} className="message">
 									{/* <Link to={`/ideas/${_id}`}> */}
@@ -417,16 +430,18 @@ const SidebarChat = () => {
 											>
 												Info
 											</Typography>
-											{reduxStoredUserId === conceptualist._id && (
-												<Typography
-													onClick={(event) => onDelete(event, data)}
-													sx={{
-														cursor: 'pointer',
-													}}
-												>
-													Delete
-												</Typography>
-											)}
+											{reduxStoredUserId === conceptualist._id &&
+												moment(createdAt).toDate().getTime() >
+													halfAnHourAgo && (
+													<Typography
+														onClick={(event) => onDelete(event, data)}
+														sx={{
+															cursor: 'pointer',
+														}}
+													>
+														Delete
+													</Typography>
+												)}
 										</div>
 									</div>
 								</div>
